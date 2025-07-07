@@ -3920,32 +3920,10 @@
                     playDifficultyUpSFX(); // Play SFX when difficulty increases
                 }
 
-                // Spawn new enemy if below MAX_ENEMIES_ON_SCREEN
+                // Sửa đoạn random enemyType khi spawn enemy
                 if (enemies.length < MAX_ENEMIES_ON_SCREEN) {
-                    const enemyTypesArray = Object.keys(enemyTypes);
-                    let availableEnemyTypes = ['basic'];
-                    if (difficultyLevel >= 2) {
-                        availableEnemyTypes.push('fairy');
-                    }
-                    if (difficultyLevel >= 4) {
-                        availableEnemyTypes.push('ghost');
-                    }
-                    if (difficultyLevel >= 3) {
-                        availableEnemyTypes.push('charger');
-                    }
-                    if (difficultyLevel >= 5) {
-                        availableEnemyTypes.push('scatter');
-                    }
-                    if (difficultyLevel >= 8) {
-                        availableEnemyTypes.push('wave');
-                    }
-                    if (difficultyLevel >= 12) {
-                        availableEnemyTypes.push('homing');
-                    }
-                    if (difficultyLevel >= 15) {
-                        availableEnemyTypes.push('hybrid');
-                    }
-                    const randomEnemyType = availableEnemyTypes[Math.floor(Math.random() * availableEnemyTypes.length)];
+                    const enemyTypesArray = Object.keys(enemyTypes); // Lấy đúng các key hiện tại
+                    const randomEnemyType = enemyTypesArray[Math.floor(Math.random() * enemyTypesArray.length)];
                     createEnemy(randomEnemyType);
                 }
             } else {
@@ -5052,6 +5030,58 @@
             if (currentPlayerType === 'gojo') setTimeout(showGojoGuide, 500);
         }
         // Gọi autoShowGojoGuideOnSelect() khi người chơi chọn nhân vật Gojo
+
+        // --- Đảm bảo random enemyType đúng ---
+        function spawnRandomEnemy() {
+            const enemyTypesArray = Object.keys(enemyTypes);
+            const randomEnemyType = enemyTypesArray[Math.floor(Math.random() * enemyTypesArray.length)];
+            createEnemy(randomEnemyType);
+        }
+        // --- Sửa trong game loop ---
+        if (!bossActive) {
+            difficultyTimer += deltaTime;
+            const difficultyIncreaseInterval = 4;
+            if (difficultyTimer >= difficultyIncreaseInterval) {
+                difficultyLevel++;
+                difficultyTimer = 0;
+                difficultyDisplay.textContent = `${texts[currentLanguage].difficulty}: ${difficultyLevel}`;
+                playDifficultyUpSFX();
+            }
+            if (enemies.length < MAX_ENEMIES_ON_SCREEN) {
+                spawnRandomEnemy();
+            }
+        } else {
+            updateBoss(deltaTime);
+            updateBossHealthBar();
+        }
+        // --- Sửa khi khởi tạo game ---
+        // Spawn initial enemy
+        spawnRandomEnemy();
+        // --- Đảm bảo player luôn được khởi tạo đúng ---
+        function resetPlayer() {
+            const char = playerCharacters[currentPlayerType];
+            player.x = CANVAS_WIDTH / 2;
+            player.y = CANVAS_HEIGHT - 50;
+            player.width = 20;
+            player.height = 20;
+            player.speed = char.baseSpeed;
+            player.focusSpeedMultiplier = char.focusSpeedMultiplier;
+            player.color = char.color;
+            player.hitboxRadius = char.hitboxRadius;
+            player.isFocusing = false;
+            player.isDashing = false;
+            player.activeSkills = char.activeSkills.map(skill => ({...skill, lastUseTime: 0}));
+            player.passive = char.passive;
+            player.damageBoostActive = false;
+        }
+        // Gọi resetPlayer() khi bắt đầu game hoặc chọn lại nhân vật
+        resetPlayer();
+        // --- Đảm bảo luôn vẽ player và enemy trong game loop ---
+        ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        updatePlayer(deltaTime);
+        drawPlayer();
+        updateEnemies(deltaTime);
+        enemies.forEach(drawEnemy);
     </script>
 </body>
 </html>
