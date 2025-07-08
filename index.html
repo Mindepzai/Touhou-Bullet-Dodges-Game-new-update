@@ -642,6 +642,59 @@
     </style>
 </head>
 <body>
+<script>
+// ==== CẤU TRÚC NHÂN VẬT MỚI ====
+const characters = {
+  reimu: {
+    name: "Reimu",
+    color: "#00ffff",
+    skills: [
+      { id: "sealBurst", name: "Seal Burst", key: "Z", type: "active", cooldown: 5, desc: "Xóa đạn quanh người." },
+      { id: "spiritClone", name: "Spirit Clone", key: "X", type: "active", cooldown: 8, desc: "Tạo phân thân bắn phụ." },
+      { id: "fantasySeal", name: "Fantasy Seal", key: "R", type: "ultimate", unlock: { energy: 100 }, cooldown: 25, desc: "Bắn đạn homing cực mạnh." },
+      { id: "divineBarrier", name: "Divine Barrier", key: "F", type: "ultimate", unlock: { kills: 20 }, cooldown: 40, desc: "Khiên bất tử, clear toàn bộ đạn." }
+    ],
+    passive: { id: "serenityAura", name: "Serenity Aura", desc: "Làm chậm đạn kẻ thù quanh mình." },
+    description: "Reimu: Đa năng, skill cân bằng, ultimate mạnh."
+  },
+  marisa: {
+    name: "Marisa",
+    color: "#ffcc00",
+    skills: [
+      { id: "starShot", name: "Star Shot", key: "Z", type: "active", cooldown: 5, desc: "Bắn sao xuyên thấu." },
+      { id: "miniSpark", name: "Mini Spark", key: "X", type: "active", cooldown: 8, desc: "Tia laser nhỏ, damage cao." },
+      { id: "masterSpark", name: "Master Spark", key: "R", type: "ultimate", unlock: { energy: 100 }, cooldown: 25, desc: "Tia laser cực mạnh, xuyên mọi thứ." },
+      { id: "starRain", name: "Star Rain", key: "F", type: "ultimate", unlock: { kills: 20 }, cooldown: 40, desc: "Mưa sao diện rộng." }
+    ],
+    passive: { id: "magicBoost", name: "Magic Boost", desc: "Tăng damage khi dùng skill." },
+    description: "Marisa: Sát thương cao, ultimate diện rộng."
+  },
+  sakuya: {
+    name: "Sakuya",
+    color: "#cccccc",
+    skills: [
+      { id: "knifeThrow", name: "Knife Throw", key: "Z", type: "active", cooldown: 5, desc: "Phóng dao về phía trước." },
+      { id: "timeSlow", name: "Time Slow", key: "X", type: "active", cooldown: 8, desc: "Làm chậm đạn địch." },
+      { id: "timeStop", name: "Time Stop", key: "R", type: "ultimate", unlock: { energy: 100 }, cooldown: 25, desc: "Dừng thời gian, clear đạn." },
+      { id: "knifeStorm", name: "Knife Storm", key: "F", type: "ultimate", unlock: { kills: 20 }, cooldown: 40, desc: "Mưa dao diện rộng." }
+    ],
+    passive: { id: "evasion", name: "Evasion", desc: "Tỉ lệ né tránh đạn ngẫu nhiên." },
+    description: "Sakuya: Khống chế, né tránh, ultimate mạnh."
+  },
+  cirno: {
+    name: "Cirno",
+    color: "#00bfff",
+    skills: [
+      { id: "iceShard", name: "Ice Shard", key: "Z", type: "active", cooldown: 5, desc: "Bắn băng làm chậm địch." },
+      { id: "frostAura", name: "Frost Aura", key: "X", type: "active", cooldown: 8, desc: "Giảm tốc độ đạn địch." },
+      { id: "absoluteZero", name: "Absolute Zero", key: "R", type: "ultimate", unlock: { energy: 100 }, cooldown: 25, desc: "Đóng băng toàn bộ màn hình." },
+      { id: "diamondDust", name: "Diamond Dust", key: "F", type: "ultimate", unlock: { kills: 20 }, cooldown: 40, desc: "Mưa băng diện rộng." }
+    ],
+    passive: { id: "frozenBody", name: "Frozen Body", desc: "Tăng giáp khi HP đầy." },
+    description: "Cirno: Trâu, skill đóng băng, ultimate diện rộng."
+  }
+};
+</script>
     <div class="game-container">
         <div class="star-background" id="starBackground"></div>
         
@@ -667,11 +720,11 @@
         <div class="joystick-container" id="joystickContainer">
             <div class="joystick-handle" id="joystickHandle"></div>
         </div>
-        <button class="control-button skill-button" id="skill1Button" aria-label="Skill 1">Skill 1: ∞</button>
+        <button id="skill1Button" class="skill-btn">Z<br><span>Skill 1</span></button>
 
         <!-- Focus and Skill 2 on the right -->
         <button class="control-button focus-button" id="focusButton" aria-label="Focus">Focus</button>
-        <button class="control-button skill-button" id="skill2Button" aria-label="Skill 2">Skill 2: ∞</button>
+        <button id="skill2Button" class="skill-btn">X<br><span>Skill 2</span></button>
 
 
         <div id="startScreen" class="start-screen">
@@ -722,8 +775,8 @@
         </div>
         <!-- Skill Buttons UI (PC & Mobile) -->
         <div id="skill-buttons-container" style="position: absolute; bottom: 30px; right: 30px; display: flex; flex-direction: row; gap: 12px; z-index: 10;">
-            <button id="skill1Button" class="skill-btn">Q<br><span>Skill 1</span></button>
-            <button id="skill2Button" class="skill-btn">E<br><span>Skill 2</span></button>
+            <button id="skill1Button" class="skill-btn">Z<br><span>Skill 1</span></button>
+            <button id="skill2Button" class="skill-btn">X<br><span>Skill 2</span></button>
             <button id="skill3Button" class="skill-btn" disabled style="opacity:0.5;">R<br><span>Skill 3</span></button>
             <button id="skill4Button" class="skill-btn" disabled style="opacity:0.5;">F<br><span>Skill 4</span></button>
         </div>
@@ -1071,37 +1124,51 @@
         const playerCharacters = {
             reimu: {
                 name: "Reimu",
-                color: '#00ffff', // Cyan
+                color: '#00ffff',
                 baseSpeed: 4.5,
                 focusSpeedMultiplier: 0.4,
                 hitboxRadius: 2,
-                initialRevives: 4, 
+                initialRevives: 4,
                 activeSkills: [
-                    { id: 'spiritualSealBurst', cooldown: 3.5, clearRadius: 200, damage: 50, description: { en: "Clears all bullets on screen and deals minor damage to nearby enemies.", vi: "Xóa tất cả đạn trên màn hình và gây sát thương nhỏ cho kẻ địch gần đó." } },
-                    { id: 'illusoryDuplicate', cooldown: 10, duration: 5, numClones: 2, defaultBulletDamage: 5, description: { en: "Creates temporary illusory duplicates that act as decoys and fire basic projectiles.", vi: "Tạo ra các bản sao ảo ảnh tạm thời hoạt động như mồi nhử và bắn đạn cơ bản." } }
+                    { id: 'spiritualSealBurst', cooldown: 4, duration: 0.5, description: { vi: "Bùa nổ: Xóa đạn, damage nhỏ" } },
+                    { id: 'illusoryDuplicate', cooldown: 10, duration: 5, description: { vi: "Ảnh phân thân: Tạo clone bắn phụ" } },
+                    { id: 'fantasySeal', cooldown: 25, duration: 1.5, unlockCondition: 'energy', description: { vi: "Ultimate: Bắn đạn homing cực mạnh" } },
+                    { id: 'divineBarrier', cooldown: 40, duration: 2, unlockCondition: 'kills', description: { vi: "Ultimate: Khiên bất tử, clear toàn bộ đạn" } }
                 ],
-                passive: { type: 'auraOfSerenity', value: 0.1, description: { en: "Slightly slows enemy bullets.", vi: "Làm chậm nhẹ đạn của kẻ thù." } },
-                description: {
-                    en: "Balanced stats. Active 1: Spiritual Seal Burst. Active 2: Illusory Duplicate. Passive: Aura of Serenity.",
-                    vi: "Chỉ số cân bằng. Kỹ năng chủ động 1: Bùa Nổ Linh Hồn. Kỹ năng chủ động 2: Ảnh Phân Thân Ảo. Kỹ năng bị động: Hào Quang Thanh Tịnh."
-                }
+                passive: { type: 'auraOfSerenity', value: 0.1, description: { vi: "Làm chậm đạn kẻ thù" } },
+                description: { vi: "Reimu: Đa năng, skill cân bằng, ultimate mạnh" }
             },
             marisa: {
                 name: "Marisa",
-                color: '#ffcc00', // Gold
+                color: '#ffcc00',
                 baseSpeed: 6,
                 focusSpeedMultiplier: 0.3,
                 hitboxRadius: 2.5,
-                initialRevives: 3, 
+                initialRevives: 3,
                 activeSkills: [
-                    { id: 'spiralOrbBarrage', cooldown: 7, speed: 10, radius: 25, damage: 120, piercing: true, description: { en: "Fires a large, slow, piercing energy orb dealing high damage.", vi: "Bắn ra một quả cầu năng lượng lớn, chậm, xuyên thấu gây sát thương cao." } },
-                    { id: 'lightningDash', cooldown: 8, dashSpeed: 15, dashDuration: 0.5, invincibilityDuringDash: 0.6, damagePerSecond: 150, description: { en: "Dashes forward with lightning speed, becoming invincible and damaging enemies in path.", vi: "Lao về phía trước với tốc độ chớp nhoáng, trở nên bất tử và gây sát thương cho kẻ địch trên đường đi." } }
+                    { id: 'spiralOrbBarrage', cooldown: 7, duration: 1, description: { vi: "Cầu năng lượng xoắn: Xuyên thấu" } },
+                    { id: 'lightningDash', cooldown: 8, duration: 0.5, description: { vi: "Lightning Dash: Lao nhanh, bất tử" } },
+                    { id: 'masterSpark', cooldown: 25, duration: 1.5, unlockCondition: 'energy', description: { vi: "Ultimate: Tia laser cực mạnh" } },
+                    { id: 'starRain', cooldown: 40, duration: 2, unlockCondition: 'kills', description: { vi: "Ultimate: Mưa sao băng diện rộng" } }
                 ],
-                passive: { type: 'arcaneFlow', value: 0.2, description: { en: "Reduces skill cooldowns.", vi: "Giảm thời gian hồi chiêu của các kỹ năng." } },
-                description: {
-                    en: "High raw speed, offensive skill. Active 1: Spiral Orb Barrage. Active 2: Lightning Dash. Passive: Arcane Flow.",
-                    vi: "Tốc độ di chuyển cao, kỹ năng tấn công. Kỹ năng chủ động 1: Cầu Xoắn Năng Lượng. Kỹ năng chủ động 2: Lao Tới Sét. Kỹ năng bị động: Dòng Chảy Bí Ẩn."
-                }
+                passive: { type: 'arcaneFlow', value: 0.2, description: { vi: "Giảm cooldown skill" } },
+                description: { vi: "Marisa: Tấn công mạnh, ultimate diện rộng" }
+            },
+            gojo: {
+                name: "Gojo",
+                color: '#5ecfff',
+                baseSpeed: 5.2,
+                focusSpeedMultiplier: 0.5,
+                hitboxRadius: 2,
+                initialRevives: 4,
+                activeSkills: [
+                    { id: 'infinity', cooldown: 7, duration: 2.5, description: { vi: "Infinity: Chặn đạn, bất tử" } },
+                    { id: 'sixEyes', cooldown: 10, duration: 3, description: { vi: "Six Eyes: Tăng tốc, né tránh, làm chậm địch" } },
+                    { id: 'hollowPurple', cooldown: 25, duration: 1.5, unlockCondition: 'energy', description: { vi: "Ultimate: Tia năng lượng cực mạnh" } },
+                    { id: 'domainExpansion', cooldown: 40, duration: 2, unlockCondition: 'kills', description: { vi: "Ultimate: Đóng băng toàn bộ, damage lớn" } }
+                ],
+                passive: { type: 'limitless', value: 0.15, description: { vi: "Hồi máu nhẹ, tăng né tránh" } },
+                description: { vi: "Gojo: Skill phòng thủ, ultimate cực mạnh" }
             },
             sakuya: {
                 name: "Sakuya",
@@ -1111,169 +1178,45 @@
                 hitboxRadius: 1.5,
                 initialRevives: 5,
                 activeSkills: [
-                    {
-                        id: 'chronosPierce',
-                        cooldown: 8,
-                        areaWidth: 220,
-                        areaHeight: 180,
-                        numDaggers: 30,
-                        daggerDamage: 60,
-                        description: {
-                            en: "Chronos Pierce: Freeze time in a large area ahead, then unleash a barrage of time-accelerated daggers that pierce all enemies and clear bullets in the area.",
-                            vi: "Xuyên Thấu Thời Gian: Ngưng đọng thời gian phía trước, phóng hàng loạt dao găm xuyên thấu, dọn sạch đạn và gây sát thương lớn trong vùng ảnh hưởng."
-                        }
-                    },
-                    {
-                        id: 'absoluteFreeze',
-                        cooldown: 14,
-                        freezeRadius: 180,
-                        freezeDuration: 3.5,
-                        description: {
-                            en: "Absolute Freeze: Freeze all enemies and bullets in a large area for a long duration. Frozen enemies/bullets are destroyed or take heavy damage when the effect ends.",
-                            vi: "Đóng Băng Tuyệt Đối: Đóng băng toàn bộ kẻ thù và đạn trong vùng lớn, thời gian đóng băng lâu. Khi kết thúc, mục tiêu bị phá hủy hoặc nhận sát thương lớn."
-                        }
-                    }
+                    { id: 'chronosPierce', cooldown: 8, duration: 1, description: { vi: "Chronos Pierce: Đóng băng vùng lớn, phóng dao" } },
+                    { id: 'absoluteFreeze', cooldown: 14, duration: 3.5, description: { vi: "Absolute Freeze: Đóng băng toàn bộ địch/đạn" } },
+                    { id: 'timeStop', cooldown: 25, duration: 1.5, unlockCondition: 'energy', description: { vi: "Ultimate: Dừng thời gian, damage lớn" } },
+                    { id: 'knifeStorm', cooldown: 40, duration: 2, unlockCondition: 'kills', description: { vi: "Ultimate: Mưa dao diện rộng" } }
                 ],
-                passive: {
-                    type: 'returnByDeath',
-                    chance: 0.99,
-                    description: {
-                        en: "Return by Death: 99% chance to completely dodge any incoming damage, flashing brightly as if time reversed.",
-                        vi: "Trở Về Từ Cõi Chết: Có 99% cơ hội hoàn toàn né tránh sát thương, phát sáng rực rỡ như thể thời gian vừa bị đảo ngược."
-                    }
-                },
-                description: {
-                    en: "Legendary evasion. Active 1: Chronos Pierce. Active 2: Absolute Freeze. Passive: Return by Death.",
-                    vi: "Né tránh huyền thoại. Kỹ năng 1: Xuyên Thấu Thời Gian. Kỹ năng 2: Đóng Băng Tuyệt Đối. Bị động: Trở Về Từ Cõi Chết."
-                }
+                passive: { type: 'returnByDeath', chance: 0.99, description: { vi: "Né tránh sát thương ngẫu nhiên" } },
+                description: { vi: "Sakuya: Khống chế, ultimate diện rộng" }
             },
             youmu: {
                 name: "Youmu",
-                color: '#90ee90', // Light Green
-                baseSpeed: 4.5,
-                focusSpeedMultiplier: 0.35,
-                hitboxRadius: 2.2,
-                initialRevives: 4, 
-                activeSkills: [
-                    { id: 'overdrivePulse', cooldown: 10, speedMultiplier: 1.8, bulletSlowMultiplier: 0.5, duration: 4, description: { en: "Greatly increases movement speed and slows enemy bullets for a short duration.", vi: "Tăng đáng kể tốc độ di chuyển và làm chậm đạn của kẻ thù trong thời gian ngắn." } },
-                    { id: 'rapidStrikeFlurry', cooldown: 6, numProjectiles: 30, speed: 15, radius: 5, damage: 30, description: { en: "Unleashes a rapid-fire barrage of strikes in a wide arc.", vi: "Tung ra một loạt đòn tấn công liên hoàn tầm ngắn theo hình vòng cung rộng." } }
-                ],
-                passive: { type: 'resilientSpirit', chance: 0.1, duration: 1.0, description: { en: "Chance to gain brief invincibility when hit.", vi: "Có cơ hội nhận bất tử ngắn khi bị trúng đạn." } },
-                description: {
-                    en: "Balanced speed, excels in evasive maneuvers. Active 1: Overdrive Pulse. Active 2: Rapid Strike Flurry. Passive: Resilient Spirit.",
-                    vi: "Tốc độ cân bằng, xuất sắc trong các pha né tránh. Kỹ năng chủ động 1: Xung Lực Quá Tải. Kỹ năng chủ động 2: Bão Đòn Đánh Nhanh. Kỹ năng bị động: Tinh Thần Kiên Cường."
-                }
-            },
-            cirno: {
-                name: "Cirno",
-                color: '#00bfff',
-                baseSpeed: 3,
-                focusSpeedMultiplier: 0.5,
-                hitboxRadius: 3,
-                initialRevives: 6,
-                activeSkills: [
-                    {
-                        id: 'frostflakeArrowBarrage',
-                        cooldown: 7,
-                        arrowCount: 7,
-                        arrowDamage: 40,
-                        arrowRadius: 18,
-                        shardCount: 8,
-                        shardDamage: 12,
-                        slowDuration: 2.5,
-                        slowAmount: 0.5,
-                        description: {
-                            en: "Frostflake Arrow Barrage: Fire a barrage of giant cryo arrows (like Ganyu), each exploding into icy shards, dealing AoE damage and slowing enemies.",
-                            vi: "Mưa Tên Băng Giá: Bắn loạt tên băng lớn, mỗi tên nổ thành nhiều mảnh nhỏ, gây sát thương diện rộng và làm chậm kẻ thù."
-                        }
-                    },
-                    {
-                        id: 'glacialWaltz',
-                        cooldown: 15,
-                        waltzRadius: 120,
-                        waltzDuration: 4,
-                        tickDamage: 30,
-                        freezeDuration: 1.5,
-                        description: {
-                            en: "Elemental Burst: Glacial Waltz: Summon a swirling blizzard around Cirno, dealing heavy cryo damage, freezing big enemies, and clearing small bullets.",
-                            vi: "Nộ Nguyên Tố: Điệu Valse Băng Giá: Tạo bão băng tuyết quanh Cirno, liên tục gây sát thương lớn, đóng băng kẻ thù lớn và phá hủy đạn nhỏ."
-                        }
-                    }
-                ],
-                passive: {
-                    type: 'absoluteZeroAura',
-                    bulletSlow: 0.5,
-                    damageReduce: 0.6,
-                    description: {
-                        en: "Absolute Zero Aura: All enemy bullets are greatly slowed and Cirno takes much less damage.",
-                        vi: "Hào Quang Tuyệt Đối Băng Giá: Làm chậm mạnh đạn kẻ thù và giảm lớn sát thương nhận vào."
-                    }
-                },
-                description: {
-                    en: "Cryo battlefield control. Active 1: Frostflake Arrow Barrage. Active 2: Glacial Waltz. Passive: Absolute Zero Aura.",
-                    vi: "Kiểm soát chiến trường bằng Băng. Kỹ năng 1: Mưa Tên Băng Giá. Kỹ năng 2: Điệu Valse Băng Giá. Bị động: Hào Quang Tuyệt Đối Băng Giá."
-                }
-            },
-            gojo: {
-                name: "Gojo",
-                color: '#5ecfff', // Xanh lam nhạt
-                baseSpeed: 5.2,
+                color: '#90ee90',
+                baseSpeed: 5.5,
                 focusSpeedMultiplier: 0.5,
                 hitboxRadius: 2,
                 initialRevives: 4,
                 activeSkills: [
-                    {
-                        id: 'infinity',
-                        cooldown: 7,
-                        duration: 2.5,
-                        description: {
-                            en: "Infinity: Become untouchable for a short time, all enemy bullets are stopped before reaching Gojo.",
-                            vi: "Vô Hạn: Trở nên bất khả xâm phạm trong thời gian ngắn, mọi đạn kẻ địch đều bị chặn lại trước khi chạm Gojo."
-                        }
-                    },
-                    {
-                        id: 'sixEyes',
-                        cooldown: 10,
-                        duration: 3,
-                        speedBoost: 2.2,
-                        description: {
-                            en: "Six Eyes: Greatly increases speed and evasion, reveals hidden bullets, and slows time for enemies.",
-                            vi: "Lục Nhãn: Tăng tốc độ, né tránh, phát hiện đạn ẩn và làm chậm thời gian của kẻ địch."
-                        }
-                    },
-                    {
-                        id: 'hollowPurple',
-                        cooldown: 30,
-                        unlockCondition: 'energy', // unlock khi đủ năng lượng
-                        damage: 400,
-                        description: {
-                            en: "Hollow Purple (Ultimate): Fires a massive energy beam that pierces all enemies and bosses. Unlocks after building up enough energy.",
-                            vi: "Hư Thức Tử: Bắn tia năng lượng cực mạnh xuyên mọi kẻ địch và boss. Mở khi tích đủ năng lượng."
-                        }
-                    },
-                    {
-                        id: 'domainExpansion',
-                        cooldown: 60,
-                        unlockCondition: 'kills', // unlock khi tiêu diệt đủ quái
-                        duration: 5,
-                        description: {
-                            en: "Domain Expansion (Ultimate): Freezes all enemies and bullets in a large area, then deals massive damage. Unlocks after defeating enough enemies.",
-                            vi: "Lãnh Vực: Đóng băng toàn bộ kẻ địch và đạn trong vùng lớn, gây sát thương cực mạnh. Mở khi tiêu diệt đủ quái."
-                        }
-                    }
+                    { id: 'overdrivePulse', cooldown: 6, duration: 2, description: { vi: "Overdrive Pulse: Tăng tốc, làm chậm đạn" } },
+                    { id: 'rapidStrikeFlurry', cooldown: 8, duration: 1, description: { vi: "Rapid Strike: Bắn liên hoàn" } },
+                    { id: 'phantomSlash', cooldown: 25, duration: 1.5, unlockCondition: 'energy', description: { vi: "Ultimate: Slash xuyên thấu, damage lớn" } },
+                    { id: 'spiritStorm', cooldown: 40, duration: 2, unlockCondition: 'kills', description: { vi: "Ultimate: Mưa kiếm linh hồn" } }
                 ],
-                passive: {
-                    type: 'limitless',
-                    value: 0.15,
-                    description: {
-                        en: "Limitless: Constantly regenerates a small amount of health and has a chance to dodge any attack.",
-                        vi: "Vô Hạn (bị động): Tự hồi máu nhẹ và có tỉ lệ né tránh mọi đòn tấn công."
-                    }
-                },
-                description: {
-                    en: "Gojo Satoru, the strongest sorcerer. Active 1: Infinity. Active 2: Six Eyes. Ultimate 1: Hollow Purple. Ultimate 2: Domain Expansion. Passive: Limitless.",
-                    vi: "Gojo Satoru, chú thuật sư mạnh nhất. Kỹ năng 1: Vô Hạn. Kỹ năng 2: Lục Nhãn. Tối thượng 1: Hư Thức Tử. Tối thượng 2: Lãnh Vực. Bị động: Vô Hạn."
-                }
+                passive: { type: 'berserk', value: 0.2, description: { vi: "Tăng damage khi HP thấp" } },
+                description: { vi: "Youmu: Tốc độ cao, ultimate damage lớn" }
+            },
+            cirno: {
+                name: "Cirno",
+                color: '#00bfff',
+                baseSpeed: 4.2,
+                focusSpeedMultiplier: 0.45,
+                hitboxRadius: 2.2,
+                initialRevives: 6,
+                activeSkills: [
+                    { id: 'iceShard', cooldown: 5, duration: 1, description: { vi: "Ice Shard: Bắn băng, làm chậm địch" } },
+                    { id: 'frostAura', cooldown: 12, duration: 3, description: { vi: "Frost Aura: Giảm tốc độ đạn địch" } },
+                    { id: 'absoluteZero', cooldown: 25, duration: 1.5, unlockCondition: 'energy', description: { vi: "Ultimate: Đóng băng toàn bộ màn hình" } },
+                    { id: 'diamondDust', cooldown: 40, duration: 2, unlockCondition: 'kills', description: { vi: "Ultimate: Mưa băng diện rộng" } }
+                ],
+                passive: { type: 'damageBoost', value: 0.25, description: { vi: "Tăng damage khi HP đầy" } },
+                description: { vi: "Cirno: Trâu, skill đóng băng, ultimate diện rộng" }
             }
         };
         let currentPlayerType = 'reimu'; // Default selected character
@@ -1562,12 +1505,22 @@
         }
 
         function drawParticles() {
-            particles.forEach(p => {
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, p.life / 30);
                 ctx.beginPath();
-                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(${parseInt(p.color.slice(1, 3), 16)}, ${parseInt(p.color.slice(3, 5), 16)}, ${parseInt(p.color.slice(5, 7), 16)}, ${p.alpha})`;
+                ctx.arc(p.x, p.y, p.radius, 0, 2 * Math.PI);
+                ctx.fillStyle = p.color;
+                ctx.shadowColor = p.color;
+                ctx.shadowBlur = 10;
                 ctx.fill();
-            });
+                ctx.restore();
+                p.x += p.vx;
+                p.y += p.vy;
+                p.life--;
+                if (p.life <= 0) particles.splice(i, 1);
+            }
         }
 
         // --- Update functions ---
@@ -3543,324 +3496,110 @@
         }
 
         // --- Skill function ---
-        function useSkill(skillIndex) {
-            const currentTime = performance.now() / 1000; // in seconds
-            const skill = player.activeSkills[skillIndex];
-            if (!skill) return; // Should not happen if skillIndex is 0 or 1
-
-            let actualSkillCooldown = skill.cooldown;
-            // Marisa's passive: Arcane Flow skill cooldown reduction
-            if (player.passive && player.passive.type === 'arcaneFlow') {
-                actualSkillCooldown *= (1 - player.passive.value);
+        function useSkill(idx) {
+            const char = characters[currentCharKey];
+            const skill = char.skills[idx];
+            if (!isSkillUnlocked(skill, idx)) {
+                alert('Chưa đủ điều kiện mở khóa!');
+                return;
             }
-
-            if ((currentTime - skill.lastUseTime) >= actualSkillCooldown && gameRunning && !gamePaused) {
-                // Create particles for skill effect (general for all skills)
-                for (let i = 0; i < 50; i++) {
-                    createParticle(player.x, player.y, player.color);
-                }
-
-                switch (skill.id) {
-                    case 'spiritualSealBurst': // Reimu Skill 1
-                        enemyProjectiles.length = 0;
-                        bulletTrails.length = 0;
-                        beams.length = 0; // Clear boss attacks too
-                        darkZones.length = 0;
-                        spectralSpikes.length = 0;
-                        phantomBlasters.length = 0;
-                        crushingDescents.length = 0; // Clear crushing descents
-                        // Add a visual burst effect
-                        for (let i = 0; i < 100; i++) {
-                            const angle = Math.random() * Math.PI * 2;
-                            const speed = Math.random() * 10 + 5;
-                            createParticle(player.x, player.y, '#ff4500', Math.random() * 8 + 3, Math.cos(angle) * speed, Math.sin(angle) * speed, 1, 0.03, 0.9);
+            if (skillCooldowns[idx] > 0) {
+                alert('Skill đang hồi chiêu!');
+                return;
+            }
+            // Kích hoạt skill thực tế
+            switch (skill.id) {
+                case 'sealBurst': // Z - Clear đạn quanh người
+                    // Xóa tất cả đạn địch trong bán kính 120px quanh player
+                    for (let i = enemyProjectiles.length - 1; i >= 0; i--) {
+                        const dx = enemyProjectiles[i].x - player.x;
+                        const dy = enemyProjectiles[i].y - player.y;
+                        if (Math.sqrt(dx*dx + dy*dy) < 120) {
+                            enemyProjectiles.splice(i, 1);
                         }
-                        // Deal damage to nearby enemies/boss
-                        enemies.forEach(enemy => {
-                            const dx = player.x - enemy.x;
-                            const dy = player.y - enemy.y;
-                            const distance = Math.sqrt(dx * dx + dy * dy);
-                            if (distance < skill.clearRadius) {
-                                enemy.health -= skill.damage;
-                            }
-                        });
-                        if (bossActive && boss) {
-                            const dx = player.x - boss.x;
-                            const dy = player.y - boss.y;
-                            const distance = Math.sqrt(dx * dx + dy * dy);
-                            if (distance < skill.clearRadius + Math.max(boss.width, boss.height) / 2) {
-                                boss.health -= skill.damage * 0.5; // Less damage to boss
-                            }
-                        }
-                        playSkillActivateSFX();
-                        break;
-                    case 'illusoryDuplicate': // Reimu Skill 2
-                        const numClones = skill.numClones;
-                        const cloneBulletSpeed = 5;
-                        const cloneBulletRadius = 4;
-                        const cloneColor = '#00ffff'; // Reimu's color
-                        const cloneBulletDamage = skill.defaultBulletDamage; // Use skill's default bullet damage
-                        playSkillActivateSFX();
-
-                        for (let i = 0; i < numClones; i++) {
-                            const cloneX = player.x + (Math.random() - 0.5) * 100;
-                            const cloneY = player.y + (Math.random() - 0.5) * 50;
-                            // Create a temporary "clone" that shoots
-                            addTimer('interval', () => { // Use addTimer
-                                if (gameRunning && !gamePaused) {
-                                    const target = bossActive && boss ? boss : enemies[0];
-                                    if (target) {
-                                        const angleToTarget = Math.atan2(target.y - cloneY, target.x - cloneX);
-                                        createBullet(cloneX, cloneY, angleToTarget, cloneBulletSpeed, cloneBulletRadius, cloneColor, playerProjectiles, false, 0, false, 'illusoryCloneBullet', null, cloneBulletDamage);
-                                    }
-                                }
-                            }, 500); // Shoot every 0.5 seconds
-                        }
-                        // Clones will disappear after skill.duration
-                        addTimer('timeout', () => {
-                            // Logic to remove clones or stop their shooting (if implemented as actual objects)
-                            // This implementation assumes the clones are just temporary shooting effects.
-                        }, skill.duration * 1000);
-                        break;
-                    case 'spiralOrbBarrage': // Marisa Skill 1
-                        playMarisaSkillSFX();
-                        createBullet(player.x, player.y, -Math.PI / 2, skill.speed, skill.radius, '#0000ff', playerProjectiles, false, 0, skill.piercing, 'spiralOrb', null, skill.damage);
-                        break;
-                    case 'lightningDash': // Marisa Skill 2
-                        playLightningDashSFX();
-                        const dashTargetY = player.y - 200; // Dash upwards
-                        const originalPlayerSpeed = player.speed;
-                        player.speed = skill.dashSpeed; // Temporarily increase speed for dash
-                        isInvincible = true;
-                        invincibleTimer = skill.invincibilityDuringDash;
-                        player.isDashing = true; // Set dashing flag
-
-                        // Store the interval ID for cleanup
-                        let lightningDashIntervalId = addTimer('interval', () => { // Use addTimer
-                            if (player.y > dashTargetY && gameRunning && !gamePaused && !playerMovementFrozen) { // Check playerMovementFrozen
-                                player.y -= player.speed * (1/60); // Move frame by frame
-                                // Clear bullets during dash and damage enemies
-                                for (let i = enemyProjectiles.length - 1; i >= 0; i--) {
-                                    const bullet = enemyProjectiles[i];
-                                    const dx = player.x - bullet.x;
-                                    const dy = player.y - bullet.y;
-                                    const distance = Math.sqrt(dx * dx + dy * dy);
-                                    if (distance < 50) { // Clear bullets in a small radius
-                                        enemyProjectiles.splice(i, 1);
-                                    }
-                                }
-                                enemies.forEach(enemy => {
-                                    const dx = player.x - enemy.x;
-                                    const dy = player.y - enemy.y;
-                                    const distance = Math.sqrt(dx * dx + dy * dy);
-                                    if (distance < player.width / 2 + enemy.width / 2) { // Collision with enemy
-                                        enemy.health -= skill.damagePerSecond * (1/60); // Continuous damage during dash
-                                    }
-                                });
-                                if (bossActive && boss) {
-                                    const dx = player.x - boss.x;
-                                    const dy = player.y - boss.y;
-                                    const distance = Math.sqrt(dx * dx + dy * dy);
-                                    if (distance < player.width / 2 + boss.width / 2) {
-                                        boss.health -= skill.damagePerSecond * 0.5 * (1/60); // Continuous damage to boss
-                                    }
-                                }
-                                // Add dash particles/afterimage
-                                createParticle(player.x + (Math.random() - 0.5) * 10, player.y + (Math.random() - 0.5) * 10, player.color, Math.random() * 3 + 1, (Math.random() - 0.5) * 5, (Math.random() - 0.5) * 5, 0.5, 0.05, 0.9);
-                            } else {
-                                clearSpecificTimer(lightningDashIntervalId); // Clear this specific interval
-                                player.speed = originalPlayerSpeed; // Revert speed
-                                player.isDashing = false; // Reset dashing flag when dash ends
-                            }
-                        }, 1000 / 60); // 60 FPS update
-
-                        addTimer('timeout', () => { // Use addTimer
-                            isInvincible = false;
-                        }, skill.invincibilityDuringDash * 1000);
-                        break;
-                    case 'temporalBlink': // Sakuya Skill 1
-                        playSakuyaSkillSFX();
-                        const dashAngle = -Math.PI / 2; // Always dash upwards for now
-                        player.x += Math.cos(dashAngle) * skill.dashDistance;
-                        player.y += Math.sin(dashAngle) * skill.dashDistance;
-                        player.x = Math.max(player.width / 2, Math.min(CANVAS_WIDTH - player.width / 2, player.x));
-                        player.y = Math.max(player.height / 2, Math.min(CANVAS_HEIGHT - player.height / 2, player.y));
-                        isInvincible = true;
-                        invincibleTimer = skill.invincibilityDuration;
-                        break;
-                    case 'windBladeVolley': // Sakuya Skill 2
-                        playWindBladeSFX();
-                        const numWindBlades = skill.numProjectiles;
-                        const windBladeSpeed = skill.speed;
-                        const windBladeRadius = skill.radius;
-                        const windBladeColor = '#87ceeb'; // Light blue for air blades
-
-                        for (let i = 0; i < numWindBlades; i++) {
-                            const angle = -Math.PI / 2 + (i - (numWindBlades - 1) / 2) * (Math.PI / 6); // Cone spread
-                            createBullet(player.x, player.y, angle, windBladeSpeed, windBladeRadius, windBladeColor, playerProjectiles, false, 0, false, 'windBlade', null, skill.damage);
-                        }
-                        break;
-                    case 'overdrivePulse': // Youmu Skill 1
-                        playSkillActivateSFX(); // General skill activate for Youmu
-                        const originalYoumuSpeed = player.speed;
-                        const originalYoumuBulletSlowActive = bulletSlowEffectActive;
-                        const originalYoumuBulletSlowTimer = bulletSlowTimer;
-
-                        player.speed *= skill.speedMultiplier;
-                        bulletSlowEffectActive = true;
-                        bulletSlowTimer = skill.duration;
-
-                        addTimer('timeout', () => {
-                            player.speed = originalYoumuSpeed;
-                            bulletSlowEffectActive = originalYoumuBulletSlowActive;
-                            bulletSlowTimer = originalYoumuBulletSlowTimer;
-                        }, skill.duration * 1000);
-                        break;
-                    case 'rapidStrikeFlurry': // Youmu Skill 2
-                        playRapidStrikeSFX();
-                        const numRapidStrikes = skill.numProjectiles;
-                        const rapidStrikeSpeed = skill.speed;
-                        const rapidStrikeRadius = skill.radius;
-                        const rapidStrikeColor = '#ff0000'; // Red for strikes
-
-                        for (let i = 0; i < numRapidStrikes; i++) {
-                            const angle = -Math.PI / 2 + (i - (numRapidStrikes - 1) / 2) * (Math.PI / 4); // Wide cone
-                            addTimer('timeout', () => {
-                                createBullet(player.x, player.y, angle, rapidStrikeSpeed, rapidStrikeRadius, rapidStrikeColor, playerProjectiles, false, 0, false, 'strikeProjectile', null, skill.damage);
-                            }, i * 30); // Very rapid fire
-                        }
-                        break;
-                    case 'absoluteZeroForm': // Cirno Skill 1
-                        playSkillActivateSFX(); // General skill activate for Cirno
-                        isInvincible = true;
-                        invincibleTimer = skill.invincibilityDuration;
-                        player.damageBoostActive = true; // Activate damage boost
-                        // Clear all bullets and boss attacks
-                        enemyProjectiles.length = 0;
-                        bulletTrails.length = 0;
-                        beams.length = 0;
-                        darkZones.length = 0;
-                        spectralSpikes.length = 0;
-                        phantomBlasters.length = 0;
-                        crushingDescents.length = 0;
-
-                        // Visual effect for Absolute Zero Form
-                        for (let i = 0; i < 150; i++) {
-                            const angle = Math.random() * Math.PI * 2;
-                            const speed = Math.random() * 15 + 5;
-                            createParticle(player.x, player.y, '#ffffff', Math.random() * 10 + 5, Math.cos(angle) * speed, Math.sin(angle) * speed, 1, 0.02, 0.9);
-                        }
-
-                        addTimer('timeout', () => {
-                            player.damageBoostActive = false; // Deactivate damage boost
-                        }, skill.duration * 1000);
-                        break;
-                    case 'glacialBeam': // Cirno Skill 2
-                        playGlacialBeamSFX();
-                        const glacialBeamSpeed = skill.speed;
-                        const glacialBeamWidth = skill.width;
-                        const glacialBeamLength = skill.length;
-                        const glacialBeamDamagePerSecond = skill.damagePerSecond; // Damage per second
-                        const glacialBeamColor = '#00e0ff'; // Brighter blue for Glacial Beam
-
-                        // Create a temporary beam that moves with the player
-                        const glacialBeam = {
-                            startX: player.x,
-                            startY: player.y,
-                            endX: player.x,
-                            endY: player.y - glacialBeamLength,
-                            width: glacialBeamWidth,
-                            color: glacialBeamColor,
-                            activeTimer: 1.0, // Glacial Beam fires for a short duration
-                            maxActive: 1.0,
-                            state: 'active',
-                            isPlayerSpark: true, // Custom property to identify
-                            damagePerSecond: glacialBeamDamagePerSecond, // Damage per second
-                            piercing: skill.piercing
-                        };
-                        beams.push(glacialBeam);
-                        break;
-                    case 'chronosPierce': // Sakuya Skill 1
-                        playSkillActivateSFX(); // General skill activate for Sakuya
-                        const originalSakuyaSpeed = player.speed;
-                        const originalSakuyaBulletSlowActive = bulletSlowEffectActive;
-                        const originalSakuyaBulletSlowTimer = bulletSlowTimer;
-
-                        player.speed *= skill.speedMultiplier;
-                        bulletSlowEffectActive = true;
-                        bulletSlowTimer = skill.duration;
-
-                        addTimer('timeout', () => {
-                            player.speed = originalSakuyaSpeed;
-                            bulletSlowEffectActive = originalSakuyaBulletSlowActive;
-                            bulletSlowTimer = originalSakuyaBulletSlowTimer;
-                        }, skill.duration * 1000);
-                        break;
-                    case 'absoluteFreeze': // Sakuya Skill 2
-                        playSkillActivateSFX(); // General skill activate for Sakuya
-                        isInvincible = true;
-                        invincibleTimer = skill.freezeDuration;
-                        player.damageBoostActive = true; // Activate damage boost
-                        // Clear all bullets and boss attacks
-                        enemyProjectiles.length = 0;
-                        bulletTrails.length = 0;
-                        beams.length = 0;
-                        darkZones.length = 0;
-                        spectralSpikes.length = 0;
-                        phantomBlasters.length = 0;
-                        crushingDescents.length = 0;
-
-                        // Visual effect for Absolute Freeze
-                        for (let i = 0; i < 150; i++) {
-                            const angle = Math.random() * Math.PI * 2;
-                            const speed = Math.random() * 15 + 5;
-                            createParticle(player.x, player.y, '#ffffff', Math.random() * 10 + 5, Math.cos(angle) * speed, Math.sin(angle) * speed, 1, 0.02, 0.9);
-                        }
-
-                        addTimer('timeout', () => {
-                            player.damageBoostActive = false; // Deactivate damage boost
-                        }, skill.freezeDuration * 1000);
-                        break;
-                }
-
-                skill.lastUseTime = currentTime; // Set last use time for cooldown
-                updateSkillButtonState();
+                    }
+                    // Hiệu ứng sáng quanh player
+                    for (let a = 0; a < 20; a++) {
+                        particles.push({x: player.x, y: player.y, vx: Math.cos(a/20*2*Math.PI)*3, vy: Math.sin(a/20*2*Math.PI)*3, r: 6, color: '#00ffff', life: 20});
+                    }
+                    break;
+                case 'spiritClone': // X - Tạo phân thân bắn phụ (bắn thêm 1 loạt đạn phụ)
+                    for (let i = 0; i < 8; i++) {
+                        const angle = (Math.PI * 2 / 8) * i;
+                        playerProjectiles.push({x: player.x, y: player.y, vx: Math.cos(angle)*5, vy: Math.sin(angle)*5, radius: 7, color: '#fff', damage: 1, life: 60});
+                    }
+                    // Hiệu ứng clone
+                    particles.push({x: player.x+30, y: player.y, vx: 0, vy: 0, r: 12, color: '#fff', life: 15});
+                    particles.push({x: player.x-30, y: player.y, vx: 0, vy: 0, r: 12, color: '#fff', life: 15});
+                    break;
+                case 'fantasySeal': // R - Bắn đạn homing cực mạnh
+                    for (let i = 0; i < 5; i++) {
+                        const angle = (Math.PI * 2 / 5) * i;
+                        playerProjectiles.push({x: player.x, y: player.y, vx: Math.cos(angle)*4, vy: Math.sin(angle)*4, radius: 12, color: '#ff0', damage: 3, homing: true, life: 80});
+                    }
+                    // Hiệu ứng sáng mạnh
+                    for (let a = 0; a < 30; a++) {
+                        particles.push({x: player.x, y: player.y, vx: Math.cos(a/30*2*Math.PI)*4, vy: Math.sin(a/30*2*Math.PI)*4, r: 8, color: '#fff', life: 25});
+                    }
+                    break;
+                case 'divineBarrier': // F - Khiên bất tử, clear toàn bộ đạn
+                    enemyProjectiles.length = 0; // Xóa sạch đạn địch
+                    // Khiên bất tử 2 giây
+                    player.invincible = true;
+                    setTimeout(() => { player.invincible = false; }, 2000);
+                    // Hiệu ứng khiên
+                    particles.push({x: player.x, y: player.y, vx: 0, vy: 0, r: 40, color: '#0ff', life: 30});
+                    break;
+                default:
+                    alert(`Dùng skill: ${skill.name}`);
+            }
+            skillCooldowns[idx] = skill.cooldown;
+            // Nếu là skill R cần energy thì trừ energy, F cần kills thì trừ kills
+            if (skill.type === 'ultimate' && skill.unlock) {
+                if (skill.unlock.energy) energy = 0;
+                if (skill.unlock.kills) kills = 0;
+            }
+            renderSkillButtons();
+        }
+        // --- Passive tự động áp dụng trong game loop ---
+        function applyPassive() {
+            const passive = player.passive;
+            if (!passive) return;
+            switch (passive.type) {
+                case 'auraOfSerenity':
+                    enemyProjectiles.forEach(b => b.speed *= (1 - passive.value));
+                    break;
+                case 'arcaneFlow':
+                    player.activeSkills.forEach(s => s.cooldown *= (1 - passive.value));
+                    break;
+                case 'limitless':
+                    if (player.hp < player.maxHp) player.hp += passive.value;
+                    break;
+                case 'returnByDeath':
+                    // Né tránh ngẫu nhiên khi bị trúng đạn (xử lý trong collision)
+                    break;
+                case 'berserk':
+                    if (player.hp < player.maxHp * 0.3) player.damageBoostActive = true;
+                    else player.damageBoostActive = false;
+                    break;
             }
         }
+        // --- Gọi applyPassive() trong game loop ---
 
+        // --- Cập nhật UI, tooltip cho từng skill ---
         function updateSkillButtonState() {
-            const currentTime = performance.now() / 1000;
-            
-            player.activeSkills.forEach((skill, index) => {
-                let actualSkillCooldown = skill.cooldown;
-                if (player.passive && player.passive.type === 'arcaneFlow') {
-                    actualSkillCooldown *= (1 - player.passive.value);
-                }
-
-                const timeSinceLastUse = currentTime - skill.lastUseTime;
-                const button = index === 0 ? skill1Button : skill2Button;
-                
-                if (timeSinceLastUse < actualSkillCooldown) {
-                    button.disabled = true;
-                    const timeLeft = Math.ceil(actualSkillCooldown - timeSinceLastUse);
-                    button.textContent = `${texts[currentLanguage][`skill${index + 1}`]}: (${timeLeft}s)`;
-                } else {
-                    button.disabled = false;
-                    button.textContent = `${texts[currentLanguage][`skill${index + 1}`]}: ∞`;
-                }
-                // Disable if player skills are frozen by boss
-                if (playerSkillsFrozen) {
-                    button.disabled = true;
-                    button.textContent = `${texts[currentLanguage][`skill${index + 1}`]}: --`; // Indicate frozen
-                }
+            player.activeSkills.forEach((skill, i) => {
+                const btn = [skill1Button, skill2Button, skill3Button, skill4Button][i];
+                if (!btn) return;
+                const now = performance.now() / 1000;
+                const timeLeft = Math.max(0, skill.cooldown - (now - (skill.lastUseTime || 0)));
+                btn.disabled = timeLeft > 0;
+                btn.style.opacity = btn.disabled ? 0.5 : 1;
+                btn.title = `${skill.description.vi} (CD: ${Math.ceil(timeLeft)}s)`;
+                btn.innerHTML = `${['Z','X','R','F'][i]}<br><span>${skill.description.vi}${timeLeft > 0 ? `<br>(${Math.ceil(timeLeft)}s)` : ''}</span>`;
             });
-            
-            // Schedule next update to show countdown if any skill is on cooldown
-            if (player.activeSkills.some(skill => (currentTime - skill.lastUseTime) < (player.passive && player.passive.type === 'arcaneFlow' ? skill.cooldown * (1 - player.passive.value) : skill.cooldown)) && !playerSkillsFrozen) {
-                addTimer('timeout', updateSkillButtonState, 1000); // Use addTimer
-            }
         }
-
+        // ... existing code ...
 
         // --- Pause/Resume game function ---
         function togglePause() {
@@ -4854,8 +4593,8 @@
 
         // Tooltip logic (PC: hover, Mobile: long press)
         const skillButtons = [
-            { btn: skill1Button, name: 'Infinity', key: 'Q', desc: 'Chặn đạn, bất tử tạm thời.' },
-            { btn: skill2Button, name: 'Six Eyes', key: 'E', desc: 'Tăng tốc, né tránh, làm chậm địch.' },
+            { btn: skill1Button, name: 'Infinity', key: 'Z', desc: 'Chặn đạn, bất tử tạm thời.' },
+            { btn: skill2Button, name: 'Six Eyes', key: 'X', desc: 'Tăng tốc, né tránh, làm chậm địch.' },
             { btn: skill3Button, name: 'Hollow Purple', key: 'R', desc: 'Ultimate: Tia năng lượng cực mạnh. Mở khi đủ năng lượng.' },
             { btn: skill4Button, name: 'Domain Expansion', key: 'F', desc: 'Ultimate: Đóng băng toàn bộ, mở khi tiêu diệt đủ quái.' }
         ];
@@ -5019,7 +4758,7 @@
             if (isMobile) {
                 text = 'Chạm nút 1: Infinity<br>2: Six Eyes<br>3: Hollow Purple (mở khi đủ năng lượng)<br>4: Domain Expansion (mở khi đủ kill)';
             } else {
-                text = 'Q: Infinity | E: Six Eyes | R: Hollow Purple (mở khi đủ năng lượng) | F: Domain Expansion (mở khi đủ kill)';
+                text = 'Z: Infinity | X: Six Eyes | R: Hollow Purple (mở khi đủ năng lượng) | F: Domain Expansion (mở khi đủ kill)';
             }
             document.getElementById('gojoSkillGuideText').innerHTML = text;
             document.getElementById('gojoSkillGuide').style.display = 'block';
@@ -5034,8 +4773,12 @@
         // --- Đảm bảo random enemyType đúng ---
         function spawnRandomEnemy() {
             const enemyTypesArray = Object.keys(enemyTypes);
-            const randomEnemyType = enemyTypesArray[Math.floor(Math.random() * enemyTypesArray.length)];
-            createEnemy(randomEnemyType);
+            if (enemyTypesArray.length > 0) {
+                const randomEnemyType = enemyTypesArray[Math.floor(Math.random() * enemyTypesArray.length)];
+                createEnemy(randomEnemyType);
+            } else {
+                console.error('Không có enemyType nào hợp lệ để spawn!');
+            }
         }
         // --- Sửa trong game loop ---
         if (!bossActive) {
@@ -5055,9 +4798,50 @@
             updateBossHealthBar();
         }
         // --- Sửa khi khởi tạo game ---
-        // Spawn initial enemy
         spawnRandomEnemy();
-        // --- Đảm bảo player luôn được khởi tạo đúng ---
+        // --- Thêm kiểm tra đầu vào trong createEnemy ---
+        function createEnemy(enemyType) {
+            const type = enemyTypes[enemyType];
+            if (!type) {
+                console.error('Enemy type không hợp lệ:', enemyType);
+                return;
+            }
+            const x = Math.random() * (CANVAS_WIDTH - type.width) + type.width / 2;
+            const y = Math.random() * (CANVAS_HEIGHT / 4) + type.height / 2;
+            enemies.push({
+                x: x,
+                y: y,
+                width: type.width,
+                height: type.height,
+                color: type.color,
+                shootInterval: type.shootInterval,
+                lastShotTime: 0,
+                movePattern: type.movePattern,
+                moveSpeed: type.moveSpeed || 0,
+                health: type.health,
+                maxHealth: type.health,
+                moveDirection: (Math.random() > 0.5) ? 1 : -1,
+                skillType: type.skillType,
+                skillInterval: type.skillInterval,
+                lastSkillTime: 0,
+                isCharging: false,
+                chargeTimer: 0,
+                chargeTargetX: 0,
+                chargeTargetY: 0,
+                originalColor: type.color,
+                rapidFireCount: type.rapidFireCount || 0,
+                rapidFireDelay: type.rapidFireDelay || 0,
+                lastRapidFireBulletTime: 0,
+                bulletsShotInBurst: 0,
+                waveDirection: type.waveDirection || null,
+                homingBullet: null,
+                attackPatterns: type.attackPatterns || [],
+                currentAttackIndex: 0,
+                attackSwitchInterval: type.attackSwitchInterval || 0,
+                lastAttackSwitchTime: 0
+            });
+        }
+        // --- Đảm bảo player luôn được khởi tạo đúng khi bắt đầu game ---
         function resetPlayer() {
             const char = playerCharacters[currentPlayerType];
             player.x = CANVAS_WIDTH / 2;
@@ -5074,14 +4858,313 @@
             player.passive = char.passive;
             player.damageBoostActive = false;
         }
-        // Gọi resetPlayer() khi bắt đầu game hoặc chọn lại nhân vật
         resetPlayer();
-        // --- Đảm bảo luôn vẽ player và enemy trong game loop ---
-        ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-        updatePlayer(deltaTime);
-        drawPlayer();
-        updateEnemies(deltaTime);
-        enemies.forEach(drawEnemy);
+        // ... existing code ...
+
+        // --- Render giao diện chọn nhân vật và skill ---
+        const charSelectDiv = document.getElementById('character-select');
+        const charInfoDiv = document.getElementById('character-info');
+        const skillButtonsDiv = document.getElementById('skill-buttons');
+
+        let currentCharKey = Object.keys(characters)[0];
+
+        function renderCharacterSelect() {
+          charSelectDiv.innerHTML = '';
+          Object.entries(characters).forEach(([key, char]) => {
+            const btn = document.createElement('button');
+            btn.textContent = char.name;
+            btn.style.background = key === currentCharKey ? '#5ecfff' : char.color;
+            btn.style.color = '#222';
+            btn.style.fontWeight = 'bold';
+            btn.style.marginRight = '8px';
+            btn.style.padding = '8px 18px';
+            btn.style.borderRadius = '8px';
+            btn.style.border = key === currentCharKey ? '2px solid #fff' : '1px solid #888';
+            btn.onclick = () => {
+              currentCharKey = key;
+              renderCharacterSelect();
+              renderCharacterInfo();
+              renderSkillButtons();
+            };
+            charSelectDiv.appendChild(btn);
+          });
+        }
+
+        function renderCharacterInfo() {
+          const char = characters[currentCharKey];
+          charInfoDiv.innerHTML = `
+            <div style="font-size:1.2em;font-weight:bold;color:${char.color}">${char.name}</div>
+            <div style="margin:6px 0 2px 0;font-style:italic;">${char.description}</div>
+            <div style="margin:2px 0 0 0;"><b>Kỹ năng bị động:</b> <span title="${char.passive.desc}">${char.passive.name}</span> <span style="color:#aaa;font-size:0.95em;">(${char.passive.desc})</span></div>
+          `;
+        }
+
+        function renderSkillButtons() {
+          const char = characters[currentCharKey];
+          skillButtonsDiv.innerHTML = '';
+          char.skills.forEach(skill => {
+            const btn = document.createElement('button');
+            btn.textContent = `${skill.key}\n${skill.name}`;
+            btn.style.whiteSpace = 'pre';
+            btn.style.padding = '10px 14px';
+            btn.style.borderRadius = '8px';
+            btn.style.background = '#222';
+            btn.style.color = '#fff';
+            btn.style.fontWeight = 'bold';
+            btn.style.fontSize = '1em';
+            btn.style.border = '2px solid #5ecfff';
+            btn.title = skill.desc;
+            btn.onmouseenter = () => {
+              btn.style.background = '#5ecfff';
+              btn.style.color = '#222';
+            };
+            btn.onmouseleave = () => {
+              btn.style.background = '#222';
+              btn.style.color = '#fff';
+            };
+            skillButtonsDiv.appendChild(btn);
+          });
+        }
+
+        // Khởi tạo giao diện lần đầu
+        renderCharacterSelect();
+        renderCharacterInfo();
+        renderSkillButtons();
+
+        // --- Quản lý cooldown và điều kiện mở khóa cho từng skill ---
+        let skillCooldowns = [0, 0, 0, 0]; // 4 skill cho mỗi nhân vật
+        let energy = 0;
+        let kills = 0;
+
+        // Hàm cập nhật cooldown mỗi frame
+        function updateSkillCooldowns(dt) {
+          for (let i = 0; i < skillCooldowns.length; i++) {
+            if (skillCooldowns[i] > 0) skillCooldowns[i] -= dt;
+            if (skillCooldowns[i] < 0) skillCooldowns[i] = 0;
+          }
+        }
+
+        // Hàm kiểm tra điều kiện mở khóa skill tối thượng
+        function isSkillUnlocked(skill, idx) {
+          if (skill.type === 'ultimate') {
+            if (skill.unlock && skill.unlock.energy && energy < skill.unlock.energy) return false;
+            if (skill.unlock && skill.unlock.kills && kills < skill.unlock.kills) return false;
+          }
+          return true;
+        }
+
+        // Hàm dùng skill
+        function useSkill(idx) {
+          const char = characters[currentCharKey];
+          const skill = char.skills[idx];
+          if (!isSkillUnlocked(skill, idx)) {
+            alert('Chưa đủ điều kiện mở khóa!');
+            return;
+          }
+          if (skillCooldowns[idx] > 0) {
+            alert('Skill đang hồi chiêu!');
+            return;
+          }
+          // Kích hoạt skill (tạm thời chỉ log ra, sau này thêm hiệu ứng thật)
+          alert(`Dùng skill: ${skill.name}`);
+          skillCooldowns[idx] = skill.cooldown;
+          // Nếu là skill R cần energy thì trừ energy, F cần kills thì trừ kills
+          if (skill.type === 'ultimate' && skill.unlock) {
+            if (skill.unlock.energy) energy = 0;
+            if (skill.unlock.kills) kills = 0;
+          }
+          renderSkillButtons();
+        }
+
+        // Bắt phím Z/X/R/F
+        window.addEventListener('keydown', (e) => {
+          if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
+          if (e.repeat) return;
+          if (e.key.toUpperCase() === 'Z') useSkill(0);
+          if (e.key.toUpperCase() === 'X') useSkill(1);
+          if (e.key.toUpperCase() === 'R') useSkill(2);
+          if (e.key.toUpperCase() === 'F') useSkill(3);
+        });
+
+        // Sửa lại renderSkillButtons để hiện trạng thái cooldown/mở khóa
+        function renderSkillButtons() {
+          const char = characters[currentCharKey];
+          skillButtonsDiv.innerHTML = '';
+          char.skills.forEach((skill, idx) => {
+            const btn = document.createElement('button');
+            let label = `${skill.key}\n${skill.name}`;
+            if (skillCooldowns[idx] > 0) label += `\n(${skillCooldowns[idx].toFixed(1)}s)`;
+            if (!isSkillUnlocked(skill, idx)) label += '\n(Chưa mở)';
+            btn.textContent = label;
+            btn.style.whiteSpace = 'pre';
+            btn.style.padding = '10px 14px';
+            btn.style.borderRadius = '8px';
+            btn.style.background = skillCooldowns[idx] > 0 || !isSkillUnlocked(skill, idx) ? '#444' : '#222';
+            btn.style.color = '#fff';
+            btn.style.fontWeight = 'bold';
+            btn.style.fontSize = '1em';
+            btn.style.border = '2px solid #5ecfff';
+            btn.title = skill.desc;
+            btn.disabled = skillCooldowns[idx] > 0 || !isSkillUnlocked(skill, idx);
+            btn.onclick = () => useSkill(idx);
+            btn.onmouseenter = () => {
+              if (!btn.disabled) {
+                btn.style.background = '#5ecfff';
+                btn.style.color = '#222';
+              }
+            };
+            btn.onmouseleave = () => {
+              btn.style.background = skillCooldowns[idx] > 0 || !isSkillUnlocked(skill, idx) ? '#444' : '#222';
+              btn.style.color = '#fff';
+            };
+            skillButtonsDiv.appendChild(btn);
+          });
+        }
+
+        // Khi đổi nhân vật thì reset cooldown, energy, kills
+        function selectCharacter(key) {
+          currentCharKey = key;
+          skillCooldowns = [0, 0, 0, 0];
+          energy = 0;
+          kills = 0;
+          renderCharacterSelect();
+          renderCharacterInfo();
+          renderSkillButtons();
+        }
+        // Sửa lại renderCharacterSelect để dùng selectCharacter
+        function renderCharacterSelect() {
+          charSelectDiv.innerHTML = '';
+          Object.entries(characters).forEach(([key, char]) => {
+            const btn = document.createElement('button');
+            btn.textContent = char.name;
+            btn.style.background = key === currentCharKey ? '#5ecfff' : char.color;
+            btn.style.color = '#222';
+            btn.style.fontWeight = 'bold';
+            btn.style.marginRight = '8px';
+            btn.style.padding = '8px 18px';
+            btn.style.borderRadius = '8px';
+            btn.style.border = key === currentCharKey ? '2px solid #fff' : '1px solid #888';
+            btn.onclick = () => selectCharacter(key);
+            charSelectDiv.appendChild(btn);
+          });
+        }
+
+        // Giả lập tăng energy/kills để test (bạn có thể thay bằng logic thật trong game loop)
+        window.addEventListener('keydown', (e) => {
+          if (e.key === '+') { energy += 20; if (energy > 100) energy = 100; renderSkillButtons(); }
+          if (e.key === '*') { kills += 5; renderSkillButtons(); }
+        });
+
+        // Cập nhật cooldown mỗi 100ms
+        timerSkill = setInterval(() => {
+          updateSkillCooldowns(0.1);
+          renderSkillButtons();
+        }, 100);
+
+        // Hàm áp dụng kỹ năng bị động
+        function applyPassiveEffect() {
+          const char = characters[currentCharKey];
+          if (!char || !char.passive) return;
+          switch (char.passive.id) {
+            case 'serenityAura':
+              // Ví dụ: Làm chậm đạn quanh người (giả lập: giảm tốc độ đạn toàn bộ 10%)
+              // Bạn có thể thay bằng logic quét đạn gần player nếu có array bullets
+              // bullets.forEach(b => b.speed *= 0.9);
+              break;
+            case 'magicBoost':
+              // Ví dụ: Tăng damage khi dùng skill (áp dụng khi bắn đạn)
+              // player.damageMultiplier = 1.2;
+              break;
+            case 'evasion':
+              // Ví dụ: Tỉ lệ né tránh đạn (áp dụng khi check va chạm)
+              // if (Math.random() < 0.1) tránh đạn
+              break;
+            case 'frozenBody':
+              // Ví dụ: Tăng giáp khi HP đầy (áp dụng khi nhận damage)
+              // if (player.hp === player.maxHp) player.armor = 1;
+              break;
+          }
+        }
+        // Gọi applyPassiveEffect() trong game loop (ví dụ trong setInterval hoặc requestAnimationFrame)
+        setInterval(() => {
+          applyPassiveEffect();
+        }, 100); // 100ms/lần, bạn có thể thay bằng gọi trong game loop thật
+
+        // Tooltip nổi cho skill
+        let tooltipDiv = document.createElement('div');
+        tooltipDiv.style.position = 'fixed';
+        tooltipDiv.style.background = '#222e';
+        tooltipDiv.style.color = '#fff';
+        tooltipDiv.style.padding = '10px 16px';
+        tooltipDiv.style.borderRadius = '8px';
+        tooltipDiv.style.fontSize = '1em';
+        tooltipDiv.style.boxShadow = '0 4px 16px #000a';
+        tooltipDiv.style.zIndex = 9999;
+        tooltipDiv.style.display = 'none';
+        document.body.appendChild(tooltipDiv);
+
+        function showTooltip(text, x, y) {
+          tooltipDiv.textContent = text;
+          tooltipDiv.style.left = x + 'px';
+          tooltipDiv.style.top = y + 'px';
+          tooltipDiv.style.display = 'block';
+        }
+        function hideTooltip() {
+          tooltipDiv.style.display = 'none';
+        }
+        // Sửa lại renderSkillButtons để gắn tooltip
+        function renderSkillButtons() {
+          const char = characters[currentCharKey];
+          skillButtonsDiv.innerHTML = '';
+          char.skills.forEach((skill, idx) => {
+            const btn = document.createElement('button');
+            let label = `${skill.key}\n${skill.name}`;
+            if (skillCooldowns[idx] > 0) label += `\n(${skillCooldowns[idx].toFixed(1)}s)`;
+            if (!isSkillUnlocked(skill, idx)) label += '\n(Chưa mở)';
+            btn.textContent = label;
+            btn.style.whiteSpace = 'pre';
+            btn.style.padding = '10px 14px';
+            btn.style.borderRadius = '8px';
+            btn.style.background = skillCooldowns[idx] > 0 || !isSkillUnlocked(skill, idx) ? '#444' : '#222';
+            btn.style.color = '#fff';
+            btn.style.fontWeight = 'bold';
+            btn.style.fontSize = '1em';
+            btn.style.border = '2px solid #5ecfff';
+            btn.title = skill.desc;
+            btn.disabled = skillCooldowns[idx] > 0 || !isSkillUnlocked(skill, idx);
+            btn.onclick = () => useSkill(idx);
+            // Tooltip hover PC
+            btn.onmouseenter = (e) => {
+              if (!btn.disabled) {
+                btn.style.background = '#5ecfff';
+                btn.style.color = '#222';
+              }
+              showTooltip(skill.desc, e.clientX + 10, e.clientY + 10);
+            };
+            btn.onmouseleave = () => {
+              btn.style.background = skillCooldowns[idx] > 0 || !isSkillUnlocked(skill, idx) ? '#444' : '#222';
+              btn.style.color = '#fff';
+              hideTooltip();
+            };
+            // Tooltip long press mobile
+            let pressTimer;
+            btn.addEventListener('touchstart', (e) => {
+              pressTimer = setTimeout(() => {
+                const touch = e.touches[0];
+                showTooltip(skill.desc, touch.clientX + 10, touch.clientY + 10);
+              }, 500);
+            });
+            btn.addEventListener('touchend', () => {
+              clearTimeout(pressTimer);
+              hideTooltip();
+            });
+            btn.addEventListener('touchcancel', () => {
+              clearTimeout(pressTimer);
+              hideTooltip();
+            });
+            skillButtonsDiv.appendChild(btn);
+          });
+        }
     </script>
 </body>
 </html>
