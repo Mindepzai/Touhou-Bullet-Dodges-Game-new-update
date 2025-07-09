@@ -13,133 +13,43 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            background-color: #1a1a2e;
-            color: #e0e0e0;
+            min-height: 100vh; /* Ensure minimum height for centering */
+            background-color: #1a1a2e; /* Dark background */
+            color: #e0e0e0; /* Light text */
             margin: 0;
-            overflow-y: auto;
+            overflow-y: auto; /* Allow vertical scrolling if content overflows */
             padding: 20px;
             box-sizing: border-box;
         }
+
         .game-container {
-            background-color: #2a2a4a;
+            background-color: #2a2a4a; /* Game container background */
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             padding: 20px;
             display: flex;
-            flex-direction: column;
+            flex-direction: column; /* Default vertical layout for desktop/portrait */
             align-items: center;
             gap: 20px;
-            width: 500px;
-            max-width: 100vw;
-            position: relative;
-            overflow: hidden;
-            flex-grow: 1;
-            justify-content: center;
-            height: auto;
+            width: 500px; /* Fixed width for desktop */
+            max-width: 90%; /* Max width for smaller screens */
+            position: relative; /* For overlays and absolute positioning of controls */
+            overflow: hidden; /* Prevent star background from spilling */
+            flex-grow: 1; /* Allow container to grow */
+            justify-content: center; /* Center content vertically */
+            height: auto; /* Allow height to adjust based on content */
         }
+
         canvas {
-            background-color: #0d0d1a;
-            border: 3px solid #6a0572;
+            background-color: #0d0d1a; /* Canvas background */
+            border: 3px solid #6a0572; /* Purple border */
             border-radius: 10px;
             display: block;
-            touch-action: none;
-            width: 100vw;
-            max-width: 480px;
-            height: auto;
-            aspect-ratio: 3/4;
+            touch-action: none; /* Prevent scrolling/zooming on touch devices */
+            width: 480px; /* Fixed width for desktop */
+            height: 640px; /* Fixed height for desktop */
             position: relative;
-            z-index: 1;
-        }
-        @media (max-width: 768px) {
-            .game-container {
-                width: 100vw;
-                max-width: 100vw;
-                padding: 5px;
-            }
-            canvas {
-                width: 100vw;
-                max-width: 100vw;
-                height: auto;
-                aspect-ratio: 3/4;
-            }
-        }
-        /* Joystick/nút ảo chỉ hiện trên mobile */
-        .joystick-container, #focusButton, #skill1Button, #skill2Button {
-            display: none;
-        }
-        @media (pointer: coarse), (max-width: 900px) {
-            .joystick-container, #focusButton, #skill1Button, #skill2Button {
-                display: flex !important;
-            }
-            .joystick-container {
-                position: fixed;
-                bottom: 2.5vh;
-                left: 2vw;
-                width: 80px;
-                height: 80px;
-                z-index: 150;
-            }
-            #skill1Button {
-                position: fixed;
-                bottom: 15vh;
-                left: 2vw;
-                width: 60px;
-                height: 60px;
-                font-size: 1em;
-                z-index: 151;
-            }
-            #focusButton {
-                position: fixed;
-                bottom: 2.5vh;
-                right: 2vw;
-                width: 60px;
-                height: 60px;
-                font-size: 1em;
-                z-index: 151;
-            }
-            #skill2Button {
-                position: fixed;
-                bottom: 15vh;
-                right: 2vw;
-                width: 60px;
-                height: 60px;
-                font-size: 1em;
-                z-index: 151;
-            }
-        }
-        /* Đảm bảo nút không đè lên canvas/gameplay */
-        .main-controls-container {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            right: 10px;
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            z-index: 200;
-            width: auto;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        .button {
-            min-width: 120px;
-            font-size: 1.1em;
-        }
-        @media (max-width: 768px) {
-            .button {
-                min-width: 80px;
-                font-size: 1em;
-            }
-        }
-        /* Responsive font */
-        html {
-            font-size: 16px;
-        }
-        @media (max-width: 600px) {
-            html {
-                font-size: 13px;
-            }
+            z-index: 1; /* Ensure canvas is above star background */
         }
 
         .star-background {
@@ -385,6 +295,24 @@
             height: 60px;
             font-size: 1.1em;
             padding: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .skill-cooldown {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0%;
+            background-color: rgba(0, 0, 0, 0.5);
+            transition: height 0.1s linear;
+            pointer-events: none;
+        }
+        
+        #skill1Button:disabled, #skill2Button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
         }
 
         /* Positioning for left side buttons */
@@ -597,104 +525,67 @@
             border-color: #a052ee;
         }
 
+        .character-selection {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .character-selection h3 {
+            color: #fff;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .character-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .character-button {
+            background: #4a4a6a;
+            border: 2px solid #6a6a8a;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .character-button:hover {
+            background: #6a6a8a;
+            transform: translateY(-2px);
+        }
+
+        .character-button.selected {
+            background: #8a2be2;
+            border-color: #a052ee;
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+        }
+
+        .character-name {
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
         .character-description {
             font-size: 0.9em;
             color: #ccc;
-            margin-top: 10px;
+            margin: 15px 0;
             max-width: 80%;
             text-align: center;
-        }
-        .skill-btn {
-            min-width: 60px;
-            min-height: 60px;
-            font-size: 18px;
-            border-radius: 12px;
-            border: 2px solid #5ecfff;
-            background: #222c;
-            color: #fff;
-            font-family: inherit;
-            box-shadow: 0 2px 8px #0006;
-            transition: 0.2s;
-            cursor: pointer;
-            position: relative;
-        }
-        .skill-btn[disabled] {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        .skill-btn span {
-            font-size: 13px;
-            display: block;
-            margin-top: 2px;
-        }
-        @media (max-width: 800px) {
-            #skill-buttons-container {
-                bottom: 20px;
-                right: 10px;
-                gap: 8px;
-            }
-            .skill-btn {
-                min-width: 48px;
-                min-height: 48px;
-                font-size: 15px;
-            }
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-<script>
-// ==== CẤU TRÚC NHÂN VẬT MỚI ====
-const characters = {
-  reimu: {
-    name: "Reimu",
-    color: "#00ffff",
-    skills: [
-      { id: "sealBurst", name: "Seal Burst", key: "Z", type: "active", cooldown: 5, desc: "Xóa đạn quanh người." },
-      { id: "spiritClone", name: "Spirit Clone", key: "X", type: "active", cooldown: 8, desc: "Tạo phân thân bắn phụ." },
-      { id: "fantasySeal", name: "Fantasy Seal", key: "R", type: "ultimate", unlock: { energy: 100 }, cooldown: 25, desc: "Bắn đạn homing cực mạnh." },
-      { id: "divineBarrier", name: "Divine Barrier", key: "F", type: "ultimate", unlock: { kills: 20 }, cooldown: 40, desc: "Khiên bất tử, clear toàn bộ đạn." }
-    ],
-    passive: { id: "serenityAura", name: "Serenity Aura", desc: "Làm chậm đạn kẻ thù quanh mình." },
-    description: "Reimu: Đa năng, skill cân bằng, ultimate mạnh."
-  },
-  marisa: {
-    name: "Marisa",
-    color: "#ffcc00",
-    skills: [
-      { id: "starShot", name: "Star Shot", key: "Z", type: "active", cooldown: 5, desc: "Bắn sao xuyên thấu." },
-      { id: "miniSpark", name: "Mini Spark", key: "X", type: "active", cooldown: 8, desc: "Tia laser nhỏ, damage cao." },
-      { id: "masterSpark", name: "Master Spark", key: "R", type: "ultimate", unlock: { energy: 100 }, cooldown: 25, desc: "Tia laser cực mạnh, xuyên mọi thứ." },
-      { id: "starRain", name: "Star Rain", key: "F", type: "ultimate", unlock: { kills: 20 }, cooldown: 40, desc: "Mưa sao diện rộng." }
-    ],
-    passive: { id: "magicBoost", name: "Magic Boost", desc: "Tăng damage khi dùng skill." },
-    description: "Marisa: Sát thương cao, ultimate diện rộng."
-  },
-  sakuya: {
-    name: "Sakuya",
-    color: "#cccccc",
-    skills: [
-      { id: "knifeThrow", name: "Knife Throw", key: "Z", type: "active", cooldown: 5, desc: "Phóng dao về phía trước." },
-      { id: "timeSlow", name: "Time Slow", key: "X", type: "active", cooldown: 8, desc: "Làm chậm đạn địch." },
-      { id: "timeStop", name: "Time Stop", key: "R", type: "ultimate", unlock: { energy: 100 }, cooldown: 25, desc: "Dừng thời gian, clear đạn." },
-      { id: "knifeStorm", name: "Knife Storm", key: "F", type: "ultimate", unlock: { kills: 20 }, cooldown: 40, desc: "Mưa dao diện rộng." }
-    ],
-    passive: { id: "evasion", name: "Evasion", desc: "Tỉ lệ né tránh đạn ngẫu nhiên." },
-    description: "Sakuya: Khống chế, né tránh, ultimate mạnh."
-  },
-  cirno: {
-    name: "Cirno",
-    color: "#00bfff",
-    skills: [
-      { id: "iceShard", name: "Ice Shard", key: "Z", type: "active", cooldown: 5, desc: "Bắn băng làm chậm địch." },
-      { id: "frostAura", name: "Frost Aura", key: "X", type: "active", cooldown: 8, desc: "Giảm tốc độ đạn địch." },
-      { id: "absoluteZero", name: "Absolute Zero", key: "R", type: "ultimate", unlock: { energy: 100 }, cooldown: 25, desc: "Đóng băng toàn bộ màn hình." },
-      { id: "diamondDust", name: "Diamond Dust", key: "F", type: "ultimate", unlock: { kills: 20 }, cooldown: 40, desc: "Mưa băng diện rộng." }
-    ],
-    passive: { id: "frozenBody", name: "Frozen Body", desc: "Tăng giáp khi HP đầy." },
-    description: "Cirno: Trâu, skill đóng băng, ultimate diện rộng."
-  }
-};
-</script>
     <div class="game-container">
         <div class="star-background" id="starBackground"></div>
         
@@ -720,11 +611,11 @@ const characters = {
         <div class="joystick-container" id="joystickContainer">
             <div class="joystick-handle" id="joystickHandle"></div>
         </div>
-        <button id="skill1Button" class="skill-btn">Z<br><span>Skill 1</span></button>
+        <button class="control-button skill-button" id="skill1Button" aria-label="Skill 1">Skill 1: ∞</button>
 
         <!-- Focus and Skill 2 on the right -->
         <button class="control-button focus-button" id="focusButton" aria-label="Focus">Focus</button>
-        <button id="skill2Button" class="skill-btn">X<br><span>Skill 2</span></button>
+        <button class="control-button skill-button" id="skill2Button" aria-label="Skill 2">Skill 2: ∞</button>
 
 
         <div id="startScreen" class="start-screen">
@@ -737,15 +628,41 @@ const characters = {
                 <button class="button character-button" data-character="sakuya" id="sakuyaButton">Sakuya (Precise)</button>
                 <button class="button character-button" data-character="youmu" id="youmuButton">Youmu (Swift)</button>
                 <button class="button character-button" data-character="cirno" id="cirnoButton">Cirno (Resilient)</button>
-                <button class="button character-button" data-character="gojo" id="gojoButton">Gojo (Ultimate)</button>
             </div>
             <div id="characterDescription" class="character-description"></div>
+            <div class="character-selection">
+                <h3>Select Character:</h3>
+                <div class="character-buttons">
+                    <button class="character-button selected" data-character="reimu">
+                        <span class="character-name">Reimu</span>
+                    </button>
+                    <button class="character-button" data-character="marisa">
+                        <span class="character-name">Marisa</span>
+                    </button>
+                    <button class="character-button" data-character="sakuya">
+                        <span class="character-name">Sakuya</span>
+                    </button>
+                    <button class="character-button" data-character="youmu">
+                        <span class="character-name">Youmu</span>
+                    </button>
+                    <button class="character-button" data-character="cirno">
+                        <span class="character-name">Cirno</span>
+                    </button>
+                </div>
+            </div>
             <div class="language-selection">
-                <button class="language-button" data-lang="en">English</button>
+                <button class="language-button selected" data-lang="en">English</button>
                 <button class="language-button" data-lang="vi">Tiếng Việt</button>
             </div>
-            <button id="guideButton" class="button">Hướng dẫn</button>
             <button id="startButton" class="button">Start Game</button>
+        </div>
+
+        <div id="bossCutscene" class="cutscene-overlay" style="display: none;">
+            <div class="cutscene-content">
+                <h2 id="cutsceneTitle">!!! WARNING !!!</h2>
+                <p id="cutsceneText">A powerful enemy approaches! Prepare for battle!</p>
+                <button id="skipCutscene" class="button">Skip</button>
+            </div>
         </div>
 
         <div id="gameOverScreen" class="game-over-screen" style="display: none;">
@@ -768,28 +685,8 @@ const characters = {
             <p id="pausedHint">Press ESC or "Resume" button to continue</p>
             <button id="homeButtonPaused" class="button">Home</button>
         </div>
-        <div id="guidePopup" class="game-over-screen" style="display: none; z-index: 300; background: rgba(20,20,40,0.97);">
-            <h2 id="guideTitle">HƯỚNG DẪN</h2>
-            <div id="guideContent" style="font-size:1em; text-align:left; max-width:90%; margin:auto; color:#fff; background:rgba(0,0,0,0.2); border-radius:10px; padding:20px 10px;"></div>
-            <button id="closeGuideButton" class="button">Đóng</button>
-        </div>
-        <!-- Skill Buttons UI (PC & Mobile) -->
-        <div id="skill-buttons-container" style="position: absolute; bottom: 30px; right: 30px; display: flex; flex-direction: row; gap: 12px; z-index: 10;">
-            <button id="skill1Button" class="skill-btn">Z<br><span>Skill 1</span></button>
-            <button id="skill2Button" class="skill-btn">X<br><span>Skill 2</span></button>
-            <button id="skill3Button" class="skill-btn" disabled style="opacity:0.5;">R<br><span>Skill 3</span></button>
-            <button id="skill4Button" class="skill-btn" disabled style="opacity:0.5;">F<br><span>Skill 4</span></button>
-        </div>
     </div>
 
-    <!-- Gojo Skill Guide Popup -->
-    <div id="gojoSkillGuide" style="display:none; position:fixed; left:50%; top:18%; transform:translate(-50%,0); background:#222e; color:#fff; padding:22px 28px; border-radius:16px; z-index:1000; font-size:18px; box-shadow:0 4px 24px #000a;">
-        <b>Gojo Skill Guide</b><br>
-        <span id="gojoSkillGuideText"></span><br>
-        <button onclick="document.getElementById('gojoSkillGuide').style.display='none'" style="margin-top:10px;">Đã hiểu</button>
-    </div>
-    <!-- Nút ? hiện lại hướng dẫn -->
-    <button id="gojoGuideBtn" style="position:fixed; right:18px; top:18px; z-index:1001; font-size:22px; border-radius:50%; width:38px; height:38px; background:#5ecfff; color:#fff; border:none; box-shadow:0 2px 8px #0006; cursor:pointer;">?</button>
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
@@ -851,8 +748,10 @@ const characters = {
         const sakuyaButton = document.getElementById('sakuyaButton');
         const youmuButton = document.getElementById('youmuButton');
         const cirnoButton = document.getElementById('cirnoButton');
-        const gojoButton = document.getElementById('gojoButton');
 
+        const cutsceneTitle = document.getElementById('cutsceneTitle');
+        const cutsceneText = document.getElementById('cutsceneText');
+        const skipCutsceneButton = document.getElementById('skipCutscene');
 
         // Canvas dimensions (will be updated dynamically)
         let CANVAS_WIDTH = 480;
@@ -902,39 +801,82 @@ const characters = {
 
         // Function to update canvas size based on available space and aspect ratio
         function updateCanvasSize() {
-            const isMobile = window.innerWidth <= 900 || window.matchMedia('(pointer: coarse)').matches;
-            let newCanvasWidth = Math.min(window.innerWidth, 480);
-            let newCanvasHeight = newCanvasWidth / (3/4);
-            if (window.innerHeight < newCanvasHeight + 120) {
-                newCanvasHeight = window.innerHeight - 120;
-                newCanvasWidth = newCanvasHeight * (3/4);
+            const gameContainer = document.querySelector('.game-container');
+            const isMobile = window.innerWidth <= 768; // Define mobile breakpoint
+            const isLandscape = window.innerWidth > window.innerHeight;
+
+            let newCanvasWidth;
+            let newCanvasHeight;
+
+            if (isMobile) {
+                // For mobile, canvas should be responsive
+                let availableWidth = window.innerWidth - 40; // Account for body padding
+                let availableHeight = window.innerHeight - 40; // Account for body padding
+
+                if (isLandscape) {
+                    // In landscape, canvas should prioritize height and adjust width
+                    newCanvasHeight = availableHeight;
+                    newCanvasWidth = newCanvasHeight * CANVAS_ASPECT_RATIO;
+
+                    // If calculated width is too wide, adjust based on width
+                    if (newCanvasWidth > availableWidth * 0.7) { // Canvas takes max 70% of available width
+                        newCanvasWidth = availableWidth * 0.7;
+                        newCanvasHeight = newCanvasWidth / CANVAS_ASPECT_RATIO;
+                    }
+                } else { // Mobile portrait
+                    newCanvasWidth = availableWidth; // Take full available width
+                    newCanvasHeight = newCanvasWidth / CANVAS_ASPECT_RATIO;
+
+                    // If calculated height is too tall, adjust based on height
+                    if (newCanvasHeight > availableHeight) {
+                        newCanvasHeight = availableHeight;
+                        newCanvasWidth = newCanvasHeight * CANVAS_ASPECT_RATIO;
+                    }
+                }
+            } else { // Desktop
+                // For desktop, canvas has fixed dimensions
+                newCanvasWidth = 480;
+                newCanvasHeight = 640;
             }
+
             CANVAS_WIDTH = newCanvasWidth;
             CANVAS_HEIGHT = newCanvasHeight;
+
             canvas.width = CANVAS_WIDTH;
             canvas.height = CANVAS_HEIGHT;
-            // Đảm bảo player và enemy không ra ngoài canvas
+
+            // Adjust game-container width/flex for landscape vs portrait
+            if (isMobile && isLandscape) {
+                gameContainer.style.flexDirection = 'row';
+                gameContainer.style.justifyContent = 'center';
+                gameContainer.style.alignItems = 'stretch'; /* Stretch to fill height */
+                gameContainer.style.maxWidth = 'unset'; /* Remove fixed max-width */
+                gameContainer.style.width = '100%'; /* Take full width */
+                gameContainer.style.height = '98vh'; /* Take most of viewport height */
+            } else if (isMobile) { // Mobile portrait
+                gameContainer.style.flexDirection = 'column';
+                gameContainer.style.justifyContent = 'center';
+                gameContainer.style.alignItems = 'center';
+                gameContainer.style.maxWidth = `${CANVAS_WIDTH + 40}px`; /* Match canvas width + padding */
+                gameContainer.style.width = '95%';
+                gameContainer.style.height = 'auto'; /* Let content dictate height */
+            } else { // Desktop
+                gameContainer.style.flexDirection = 'column';
+                gameContainer.style.justifyContent = 'center';
+                gameContainer.style.alignItems = 'center';
+                gameContainer.style.maxWidth = `500px`; /* Fixed width for desktop */
+                gameContainer.style.width = `500px`;
+                gameContainer.style.height = 'auto';
+            }
+
+
+            // Reposition player if canvas size changes significantly
+            // Ensure player stays within new canvas bounds
             player.x = Math.min(player.x, CANVAS_WIDTH - player.width / 2);
             player.y = Math.min(player.y, CANVAS_HEIGHT - player.height / 2);
             player.x = Math.max(player.x, player.width / 2);
             player.y = Math.max(player.y, player.height / 2);
         }
-        window.addEventListener('resize', updateCanvasSize);
-        window.addEventListener('orientationchange', updateCanvasSize);
-        // --- Ẩn/hiện nút ảo theo thiết bị ---
-        function updateControlVisibility() {
-            const isMobile = window.innerWidth <= 900 || window.matchMedia('(pointer: coarse)').matches;
-            document.getElementById('joystickContainer').style.display = isMobile ? 'flex' : 'none';
-            document.getElementById('focusButton').style.display = isMobile ? 'flex' : 'none';
-            document.getElementById('skill1Button').style.display = isMobile ? 'flex' : 'none';
-            document.getElementById('skill2Button').style.display = isMobile ? 'flex' : 'none';
-        }
-        window.addEventListener('resize', updateControlVisibility);
-        window.addEventListener('orientationchange', updateControlVisibility);
-        window.addEventListener('load', () => {
-            updateCanvasSize();
-            updateControlVisibility();
-        });
 
         // Function to create dynamic star background
         function createStars() {
@@ -1018,12 +960,11 @@ const characters = {
         let bulletSlowTimer = 0;
         let bossTimeStopActive = false; // For Time Manipulator's Temporal Stasis
         let bossTimeStopTimer = 0;
-        let playerMovementFrozen = false; // New: For Dio's Temporal Stasis
-        let playerSkillsFrozen = false; // New: For Dio's Temporal Stasis
 
         // --- Boss variables ---
         let boss = null;
         let bossActive = false;
+        let inCutscene = false; // Track if we're in a cutscene
         const BOSS_SPAWN_SCORE = 100; // Score to trigger boss fight
         const BOSS_PHASES = [ // Define boss phases with health and initial shoot interval
             { maxHealth: 500, shootInterval: 0.4, name: "Shadow Weaver" }, // Phase 1: Shadow Weaver (Cid)
@@ -1048,74 +989,110 @@ const characters = {
         const MAX_ENEMIES_ON_SCREEN = 3; // Reduced number of regular enemies
 
         const enemyTypes = {
-            slime: {
-                width: 28,
-                height: 20,
-                color: '#7ec850', // Xanh lá cây nhạt
-                shootInterval: 2.8,
-                movePattern: 'slow',
-                moveSpeed: 0.6,
-                health: 50,
-                skillType: 'slimeShot',
-                inspiration: {
-                    en: "Slime from Dragon Quest and isekai anime, slow and weak but classic.",
-                    vi: "Slime từ Dragon Quest và anime isekai, di chuyển chậm, yếu nhưng kinh điển."
-                }
-            },
-            fairy: {
-                width: 26,
-                height: 26,
-                color: '#00ffcc', // Xanh ngọc
-                shootInterval: 2.0,
-                movePattern: 'zigzag',
-                moveSpeed: 1.2,
-                health: 60,
-                skillType: 'fairySpread',
-                inspiration: {
-                    en: "Fairy from Touhou, zigzag movement and spread shot.",
-                    vi: "Tiên nhỏ Touhou, di chuyển zigzag và bắn đạn tỏa tròn."
-                }
-            },
-            yinyang: {
+            basic: {
                 width: 30,
                 height: 30,
-                color: '#ffffff', // Trắng
-                shootInterval: 3.0,
-                movePattern: 'float',
+                color: '#ff0000', // Red
+                shootInterval: 2.5, // Cooldown for the entire burst
+                movePattern: 'horizontal',
+                moveSpeed: 1,
+                health: 100,
+                skillType: 'rapidFire', // Changed to rapidFire
+                rapidFireCount: 3, // Number of bullets in burst
+                rapidFireDelay: 0.15, // Delay between bullets in burst
+                lastRapidFireBulletTime: 0, // To track delay between bullets in a burst
+                bulletsShotInBurst: 0, // Counter for bullets in current burst
+                inspiration: {
+                    en: "Rapid-fire energy blasts, like a basic Ki Blast from Dragon Ball or a magic missile from various fantasy anime.",
+                    vi: "Những luồng năng lượng bắn nhanh, giống như Ki Blast cơ bản trong Dragon Ball hoặc tên lửa ma thuật trong nhiều anime giả tưởng."
+                }
+            },
+            charger: { // New enemy type with charge skill
+                width: 35,
+                height: 35,
+                color: '#ffa500', // Orange
+                shootInterval: 2.0, // Less frequent regular shots
+                movePattern: 'chase', // Will chase when not charging
                 moveSpeed: 0.8,
-                health: 70,
-                skillType: 'homing',
+                health: 120,
+                skillType: 'charge',
+                skillInterval: 4, // Charge every 4 seconds
+                chargeSpeed: 8, // Fast charge speed
+                chargeDuration: 0.5, // How long the charge lasts
+                chargeCooldown: 2, // Cooldown after charge
                 inspiration: {
-                    en: "Yin-Yang Orb from Touhou, floating and fires homing bullets.",
-                    vi: "Quả cầu âm dương Touhou, bay lượn và bắn đạn tự tìm mục tiêu."
+                    en: "A powerful, direct charge attack, similar to Luffy's Jet Pistol/Gatling from One Piece or charging attacks from mecha anime.",
+                    vi: "Một đòn tấn công lao tới trực diện mạnh mẽ, tương tự Jet Pistol/Gatling của Luffy trong One Piece hoặc các đòn tấn công lao tới trong anime Mecha."
                 }
             },
-            bat: {
-                width: 24,
-                height: 16,
-                color: '#a060c0', // Tím
-                shootInterval: 0,
-                movePattern: 'dive',
-                moveSpeed: 1.7,
-                health: 40,
-                skillType: 'dive',
+            scatter: { // New enemy type with scatter shot skill
+                width: 40,
+                height: 40,
+                color: '#8a2be2', // BlueViolet
+                shootInterval: 1.5,
+                movePattern: 'zigzag',
+                moveSpeed: 0.7,
+                health: 110,
+                skillType: 'scatterShot',
+                skillInterval: 3, // Scatter shot every 3 seconds
+                scatterCount: 12, // Number of bullets in scatter shot
+                scatterSpeed: 4, // Speed of scatter bullets
                 inspiration: {
-                    en: "Bat from Castlevania/Touhou, fast dive attack, no bullets.",
-                    vi: "Dơi từ Castlevania/Touhou, lao nhanh vào người chơi, không bắn đạn."
+                    en: "Danmaku (bullet hell) patterns from Touhou Project, or wide-area magic attacks like a 'Meteor Shower' spell from fantasy anime.",
+                    vi: "Các kiểu bắn Danmaku (mưa đạn) từ Touhou Project, hoặc các đòn tấn công ma thuật diện rộng như phép 'Mưa Sao Băng' trong anime giả tưởng."
                 }
             },
-            ghost: {
-                width: 32,
-                height: 32,
-                color: '#eeeeee', // Trắng xám
-                shootInterval: 3.5,
-                movePattern: 'ghost',
+            wave: { // New enemy type: Wave Shooter
+                width: 35,
+                height: 35,
+                color: '#00ccff', // Light Blue
+                shootInterval: 2.5, // Slower regular shots
+                movePattern: 'horizontal',
+                moveSpeed: 0.9,
+                health: 115,
+                skillType: 'waveShot',
+                skillInterval: 5, // Wave shot every 5 seconds
+                waveCount: 8, // Base number of bullets in wave
+                waveSpeed: 3, // Base speed of wave bullets
+                waveDirection: 'horizontal', // Can be 'horizontal' or 'vertical'
+                inspiration: {
+                    en: "Energy wave attacks like Kamehameha from Dragon Ball or Hadoken from Street Fighter (anime adaptations), but as a series of projectiles.",
+                    vi: "Các đòn tấn công sóng năng lượng như Kamehameha trong Dragon Ball hoặc Hadoken trong Street Fighter (chuyển thể anime), nhưng dưới dạng một loạt đạn."
+                }
+            },
+            homing: { // New enemy type: Homing Shooter
+                width: 30,
+                height: 30,
+                color: '#ff66b2', // Pink
+                shootInterval: 1.8,
+                movePattern: 'chase',
+                moveSpeed: 0.6,
+                health: 105,
+                skillType: 'homingShot',
+                skillInterval: 6, // Homing shot every 6 seconds
+                homingSpeed: 2, // Base speed of homing bullet
+                homingStrength: 0.05, // Base homing strength
+                inspiration: {
+                    en: "Relentless, tracking projectiles like Frieza's Death Beams from Dragon Ball Z or Itachi's Amaterasu from Naruto.",
+                    vi: "Các loại đạn truy đuổi không ngừng như Death Beam của Frieza trong Dragon Ball Z hoặc Amaterasu của Itachi trong Naruto."
+                }
+            },
+            hybrid: { // New enemy type: Hybrid Shooter
+                width: 45,
+                height: 45,
+                color: '#800080', // Purple
+                shootInterval: 0.5, // Faster overall interval, but cycles through attacks
+                movePattern: 'chase', // Can chase player
                 moveSpeed: 0.5,
-                health: 80,
-                skillType: 'ghostExplode',
+                health: 250, // Higher health
+                skillType: 'hybrid', // Special skill type
+                attackPatterns: ['rapidFire', 'scatterShot', 'homingShot', 'waveShot'], // List of attacks it can use
+                currentAttackIndex: 0,
+                attackSwitchInterval: 3, // Switch attack every 3 seconds
+                lastAttackSwitchTime: 0,
                 inspiration: {
-                    en: "Ghost from Bleach/Touhou, moves through walls, explodes into bullets on death.",
-                    vi: "Hồn ma từ Bleach/Touhou, xuyên tường, khi chết phát nổ ra nhiều đạn nhỏ."
+                    en: "A versatile foe, combining various attack styles like a skilled combatant from a shonen anime, adapting its strategy.",
+                    vi: "Một kẻ thù đa năng, kết hợp nhiều phong cách tấn công khác nhau như một chiến binh tài ba trong anime shonen, liên tục thay đổi chiến thuật."
                 }
             }
         };
@@ -1124,99 +1101,88 @@ const characters = {
         const playerCharacters = {
             reimu: {
                 name: "Reimu",
-                color: '#00ffff',
+                color: '#00ffff', // Cyan
                 baseSpeed: 4.5,
                 focusSpeedMultiplier: 0.4,
                 hitboxRadius: 2,
-                initialRevives: 4,
+                initialRevives: 4, 
                 activeSkills: [
-                    { id: 'spiritualSealBurst', cooldown: 4, duration: 0.5, description: { vi: "Bùa nổ: Xóa đạn, damage nhỏ" } },
-                    { id: 'illusoryDuplicate', cooldown: 10, duration: 5, description: { vi: "Ảnh phân thân: Tạo clone bắn phụ" } },
-                    { id: 'fantasySeal', cooldown: 25, duration: 1.5, unlockCondition: 'energy', description: { vi: "Ultimate: Bắn đạn homing cực mạnh" } },
-                    { id: 'divineBarrier', cooldown: 40, duration: 2, unlockCondition: 'kills', description: { vi: "Ultimate: Khiên bất tử, clear toàn bộ đạn" } }
+                    { id: 'spiritualSealBurst', cooldown: 3.5, clearRadius: 200, damage: 50, description: { en: "Clears all bullets on screen and deals minor damage to nearby enemies.", vi: "Xóa tất cả đạn trên màn hình và gây sát thương nhỏ cho kẻ địch gần đó." } },
+                    { id: 'illusoryDuplicate', cooldown: 10, duration: 5, numClones: 2, description: { en: "Creates temporary illusory duplicates that act as decoys and fire basic projectiles.", vi: "Tạo ra các bản sao ảo ảnh tạm thời hoạt động như mồi nhử và bắn đạn cơ bản." } }
                 ],
-                passive: { type: 'auraOfSerenity', value: 0.1, description: { vi: "Làm chậm đạn kẻ thù" } },
-                description: { vi: "Reimu: Đa năng, skill cân bằng, ultimate mạnh" }
+                passive: { type: 'auraOfSerenity', value: 0.1, description: { en: "Slightly slows enemy bullets.", vi: "Làm chậm nhẹ đạn của kẻ thù." } },
+                description: {
+                    en: "Balanced stats. Active 1: Spiritual Seal Burst. Active 2: Illusory Duplicate. Passive: Aura of Serenity.",
+                    vi: "Chỉ số cân bằng. Kỹ năng chủ động 1: Bùa Nổ Linh Hồn. Kỹ năng chủ động 2: Ảnh Phân Thân Ảo. Kỹ năng bị động: Hào Quang Thanh Tịnh."
+                }
             },
             marisa: {
                 name: "Marisa",
-                color: '#ffcc00',
+                color: '#ffcc00', // Gold
                 baseSpeed: 6,
                 focusSpeedMultiplier: 0.3,
                 hitboxRadius: 2.5,
-                initialRevives: 3,
+                initialRevives: 3, 
                 activeSkills: [
-                    { id: 'spiralOrbBarrage', cooldown: 7, duration: 1, description: { vi: "Cầu năng lượng xoắn: Xuyên thấu" } },
-                    { id: 'lightningDash', cooldown: 8, duration: 0.5, description: { vi: "Lightning Dash: Lao nhanh, bất tử" } },
-                    { id: 'masterSpark', cooldown: 25, duration: 1.5, unlockCondition: 'energy', description: { vi: "Ultimate: Tia laser cực mạnh" } },
-                    { id: 'starRain', cooldown: 40, duration: 2, unlockCondition: 'kills', description: { vi: "Ultimate: Mưa sao băng diện rộng" } }
+                    { id: 'spiralOrbBarrage', cooldown: 7, speed: 10, radius: 25, damage: 200, piercing: true, description: { en: "Fires a large, slow, piercing energy orb dealing high damage.", vi: "Bắn ra một quả cầu năng lượng lớn, chậm, xuyên thấu gây sát thương cao." } },
+                    { id: 'lightningDash', cooldown: 8, dashSpeed: 15, dashDuration: 0.5, invincibilityDuringDash: 0.6, damage: 150, description: { en: "Dashes forward with lightning speed, becoming invincible and damaging enemies in path.", vi: "Lao về phía trước với tốc độ chớp nhoáng, trở nên bất tử và gây sát thương cho kẻ địch trên đường đi." } }
                 ],
-                passive: { type: 'arcaneFlow', value: 0.2, description: { vi: "Giảm cooldown skill" } },
-                description: { vi: "Marisa: Tấn công mạnh, ultimate diện rộng" }
-            },
-            gojo: {
-                name: "Gojo",
-                color: '#5ecfff',
-                baseSpeed: 5.2,
-                focusSpeedMultiplier: 0.5,
-                hitboxRadius: 2,
-                initialRevives: 4,
-                activeSkills: [
-                    { id: 'infinity', cooldown: 7, duration: 2.5, description: { vi: "Infinity: Chặn đạn, bất tử" } },
-                    { id: 'sixEyes', cooldown: 10, duration: 3, description: { vi: "Six Eyes: Tăng tốc, né tránh, làm chậm địch" } },
-                    { id: 'hollowPurple', cooldown: 25, duration: 1.5, unlockCondition: 'energy', description: { vi: "Ultimate: Tia năng lượng cực mạnh" } },
-                    { id: 'domainExpansion', cooldown: 40, duration: 2, unlockCondition: 'kills', description: { vi: "Ultimate: Đóng băng toàn bộ, damage lớn" } }
-                ],
-                passive: { type: 'limitless', value: 0.15, description: { vi: "Hồi máu nhẹ, tăng né tránh" } },
-                description: { vi: "Gojo: Skill phòng thủ, ultimate cực mạnh" }
+                passive: { type: 'arcaneFlow', value: 0.2, description: { en: "Reduces skill cooldowns.", vi: "Giảm thời gian hồi chiêu của các kỹ năng." } },
+                description: {
+                    en: "High raw speed, offensive skill. Active 1: Spiral Orb Barrage. Active 2: Lightning Dash. Passive: Arcane Flow.",
+                    vi: "Tốc độ di chuyển cao, kỹ năng tấn công. Kỹ năng chủ động 1: Cầu Xoắn Năng Lượng. Kỹ năng chủ động 2: Lao Tới Sét. Kỹ năng bị động: Dòng Chảy Bí Ẩn."
+                }
             },
             sakuya: {
                 name: "Sakuya",
-                color: '#cccccc',
+                color: '#cccccc', // Silver
                 baseSpeed: 3.5,
                 focusSpeedMultiplier: 0.6,
                 hitboxRadius: 1.5,
-                initialRevives: 5,
+                initialRevives: 5, 
                 activeSkills: [
-                    { id: 'chronosPierce', cooldown: 8, duration: 1, description: { vi: "Chronos Pierce: Đóng băng vùng lớn, phóng dao" } },
-                    { id: 'absoluteFreeze', cooldown: 14, duration: 3.5, description: { vi: "Absolute Freeze: Đóng băng toàn bộ địch/đạn" } },
-                    { id: 'timeStop', cooldown: 25, duration: 1.5, unlockCondition: 'energy', description: { vi: "Ultimate: Dừng thời gian, damage lớn" } },
-                    { id: 'knifeStorm', cooldown: 40, duration: 2, unlockCondition: 'kills', description: { vi: "Ultimate: Mưa dao diện rộng" } }
+                    { id: 'temporalBlink', cooldown: 4, dashDistance: 150, invincibilityDuration: 0.5, description: { en: "Performs a quick, short-distance teleport, granting brief invincibility.", vi: "Thực hiện một pha dịch chuyển tức thời nhanh, tầm ngắn, ban cho khả năng bất tử trong chốc lát." } },
+                    { id: 'windBladeVolley', cooldown: 3, numProjectiles: 7, speed: 10, radius: 8, description: { en: "Fires multiple crescent-shaped air blades in a cone.", vi: "Bắn ra nhiều lưỡi gió hình lưỡi liềm theo hình nón." } }
                 ],
-                passive: { type: 'returnByDeath', chance: 0.99, description: { vi: "Né tránh sát thương ngẫu nhiên" } },
-                description: { vi: "Sakuya: Khống chế, ultimate diện rộng" }
+                passive: { type: 'evasiveInsight', chance: 0.15, duration: 1.5, radius: 100, description: { en: "Chance to slow nearby bullets on successful dodge.", vi: "Có cơ hội làm chậm đạn gần đó khi né thành công." } },
+                description: {
+                    en: "Low speed, small hitbox for precision. Active 1: Temporal Blink. Active 2: Wind Blade Volley. Passive: Evasive Insight.",
+                    vi: "Tốc độ thấp, hitbox nhỏ để né chính xác. Kỹ năng chủ động 1: Dịch Chuyển Thời Gian. Kỹ năng chủ động 2: Loạt Lưỡi Gió. Kỹ năng bị động: Trực Giác Né Tránh."
+                }
             },
-            youmu: {
+            youmu: { // New character
                 name: "Youmu",
-                color: '#90ee90',
-                baseSpeed: 5.5,
-                focusSpeedMultiplier: 0.5,
-                hitboxRadius: 2,
-                initialRevives: 4,
-                activeSkills: [
-                    { id: 'overdrivePulse', cooldown: 6, duration: 2, description: { vi: "Overdrive Pulse: Tăng tốc, làm chậm đạn" } },
-                    { id: 'rapidStrikeFlurry', cooldown: 8, duration: 1, description: { vi: "Rapid Strike: Bắn liên hoàn" } },
-                    { id: 'phantomSlash', cooldown: 25, duration: 1.5, unlockCondition: 'energy', description: { vi: "Ultimate: Slash xuyên thấu, damage lớn" } },
-                    { id: 'spiritStorm', cooldown: 40, duration: 2, unlockCondition: 'kills', description: { vi: "Ultimate: Mưa kiếm linh hồn" } }
-                ],
-                passive: { type: 'berserk', value: 0.2, description: { vi: "Tăng damage khi HP thấp" } },
-                description: { vi: "Youmu: Tốc độ cao, ultimate damage lớn" }
-            },
-            cirno: {
-                name: "Cirno",
-                color: '#00bfff',
-                baseSpeed: 4.2,
-                focusSpeedMultiplier: 0.45,
+                color: '#90ee90', // Light Green
+                baseSpeed: 4.5,
+                focusSpeedMultiplier: 0.35,
                 hitboxRadius: 2.2,
-                initialRevives: 6,
+                initialRevives: 4, 
                 activeSkills: [
-                    { id: 'iceShard', cooldown: 5, duration: 1, description: { vi: "Ice Shard: Bắn băng, làm chậm địch" } },
-                    { id: 'frostAura', cooldown: 12, duration: 3, description: { vi: "Frost Aura: Giảm tốc độ đạn địch" } },
-                    { id: 'absoluteZero', cooldown: 25, duration: 1.5, unlockCondition: 'energy', description: { vi: "Ultimate: Đóng băng toàn bộ màn hình" } },
-                    { id: 'diamondDust', cooldown: 40, duration: 2, unlockCondition: 'kills', description: { vi: "Ultimate: Mưa băng diện rộng" } }
+                    { id: 'overdrivePulse', cooldown: 10, speedMultiplier: 1.8, bulletSlowMultiplier: 0.5, duration: 4, description: { en: "Greatly increases movement speed and slows enemy bullets for a short duration.", vi: "Tăng đáng kể tốc độ di chuyển và làm chậm đạn của kẻ thù trong thời gian ngắn." } },
+                    { id: 'rapidStrikeFlurry', cooldown: 6, numProjectiles: 30, speed: 15, radius: 5, description: { en: "Unleashes a rapid-fire barrage of strikes in a wide arc.", vi: "Tung ra một loạt đòn tấn công liên hoàn tầm ngắn theo hình vòng cung rộng." } }
                 ],
-                passive: { type: 'damageBoost', value: 0.25, description: { vi: "Tăng damage khi HP đầy" } },
-                description: { vi: "Cirno: Trâu, skill đóng băng, ultimate diện rộng" }
+                passive: { type: 'resilientSpirit', chance: 0.1, duration: 1.0, description: { en: "Chance to gain brief invincibility when hit.", vi: "Có cơ hội nhận bất tử ngắn khi bị trúng đạn." } },
+                description: {
+                    en: "Balanced speed, excels in evasive maneuvers. Active 1: Overdrive Pulse. Active 2: Rapid Strike Flurry. Passive: Resilient Spirit.",
+                    vi: "Tốc độ cân bằng, xuất sắc trong các pha né tránh. Kỹ năng chủ động 1: Xung Lực Quá Tải. Kỹ năng chủ động 2: Bão Đòn Đánh Nhanh. Kỹ năng bị động: Tinh Thần Kiên Cường."
+                }
+            },
+            cirno: { // New character
+                name: "Cirno",
+                color: '#00bfff', // Deep Sky Blue
+                baseSpeed: 3,
+                focusSpeedMultiplier: 0.5,
+                hitboxRadius: 3, // Larger hitbox
+                initialRevives: 6, 
+                activeSkills: [
+                    { id: 'absoluteZeroForm', cooldown: 15, duration: 3, damageBoost: 0.5, invincibilityDuration: 3, description: { en: "Unleashes Absolute Zero Form, granting temporary invincibility, increased damage, and clearing bullets.", vi: "Giải phóng Dạng Tuyệt Đối Không, ban cho khả năng bất tử tạm thời, tăng sát thương và xóa đạn." } },
+                    { id: 'glacialBeam', cooldown: 7, speed: 8, width: 30, length: 300, damage: 100, piercing: true, description: { en: "Fires a large, slow, piercing energy beam.", vi: "Bắn ra một tia năng lượng lớn, chậm, xuyên thấu." } }
+                ],
+                passive: { type: 'icyResilience', shieldDuration: 1.0, description: { en: "Gain a temporary shield after reviving.", vi: "Nhận một lá chắn tạm thời sau khi hồi sinh." } },
+                description: {
+                    en: "High revives, large hitbox. Active 1: Absolute Zero Form. Active 2: Glacial Beam. Passive: Icy Resilience.",
+                    vi: "Nhiều mạng hồi sinh, hitbox lớn. Kỹ năng chủ động 1: Dạng Tuyệt Đối Không. Kỹ năng chủ động 2: Tia Băng Giá. Kỹ năng bị động: Băng Giá Kiên Cường."
+                }
             }
         };
         let currentPlayerType = 'reimu'; // Default selected character
@@ -1249,8 +1215,6 @@ const characters = {
 
         // --- Keyboard event handling ---
         window.addEventListener('keydown', (e) => {
-            if (playerMovementFrozen) return; // If player movement is frozen by boss skill
-
             if (keys.hasOwnProperty(e.code)) { keys[e.code] = true; }
             else if (keys.hasOwnProperty(e.key)) { keys[e.key] = true; }
             if (e.key === 'Escape' || e.code === 'Escape') { togglePause(); }
@@ -1260,11 +1224,11 @@ const characters = {
                 player.isFocusing = true;
             }
             // Handle Z for skill 1
-            if (e.code === 'KeyZ' && !e.repeat && !playerSkillsFrozen) { // !e.repeat prevents multiple triggers on hold
+            if (e.code === 'KeyZ' && !e.repeat) { // !e.repeat prevents multiple triggers on hold
                 useSkill(0); // Use first skill
             }
             // Handle X for skill 2
-            if (e.code === 'KeyX' && !e.repeat && !playerSkillsFrozen) { // !e.repeat prevents multiple triggers on hold
+            if (e.code === 'KeyX' && !e.repeat) { // !e.repeat prevents multiple triggers on hold
                 useSkill(1); // Use second skill
             }
         });
@@ -1287,7 +1251,6 @@ const characters = {
 
         joystickContainer.addEventListener('touchstart', (e) => {
             e.preventDefault(); // Prevent scrolling/zooming
-            if (playerMovementFrozen) return; // If player movement is frozen by boss skill
             joystickActive = true;
             const touch = e.touches[0];
             const containerRect = joystickContainer.getBoundingClientRect();
@@ -1298,7 +1261,7 @@ const characters = {
 
         joystickContainer.addEventListener('touchmove', (e) => {
             e.preventDefault();
-            if (joystickActive && !playerMovementFrozen) { // If player movement is frozen by boss skill
+            if (joystickActive) {
                 const touch = e.touches[0];
                 moveJoystick(touch.clientX, touch.clientY);
             }
@@ -1354,7 +1317,6 @@ const characters = {
         // Focus button for mobile
         focusButton.addEventListener('touchstart', (e) => {
             e.preventDefault();
-            if (playerMovementFrozen) return; // If player movement is frozen by boss skill
             player.isFocusing = true;
         });
         focusButton.addEventListener('touchend', (e) => {
@@ -1367,12 +1329,8 @@ const characters = {
         });
 
         // Skill buttons for mobile
-        skill1Button.addEventListener('click', () => {
-            if (!playerSkillsFrozen) useSkill(0); // If player skills are not frozen by boss skill
-        });
-        skill2Button.addEventListener('click', () => {
-            if (!playerSkillsFrozen) useSkill(1); // If player skills are not frozen by boss skill
-        });
+        skill1Button.addEventListener('click', () => useSkill(0));
+        skill2Button.addEventListener('click', () => useSkill(1));
 
 
         // --- Drawing functions ---
@@ -1394,10 +1352,6 @@ const characters = {
                 ctx.lineWidth = 1.5;
                 ctx.stroke();
             }
-            drawInfinityEffect();
-            drawSixEyesEffect();
-            drawHollowPurpleEffect();
-            drawDomainExpansionEffect();
         }
 
         // Bullet trail effect
@@ -1505,22 +1459,12 @@ const characters = {
         }
 
         function drawParticles() {
-            for (let i = particles.length - 1; i >= 0; i--) {
-                const p = particles[i];
-                ctx.save();
-                ctx.globalAlpha = Math.max(0, p.life / 30);
+            particles.forEach(p => {
                 ctx.beginPath();
-                ctx.arc(p.x, p.y, p.radius, 0, 2 * Math.PI);
-                ctx.fillStyle = p.color;
-                ctx.shadowColor = p.color;
-                ctx.shadowBlur = 10;
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${parseInt(p.color.slice(1, 3), 16)}, ${parseInt(p.color.slice(3, 5), 16)}, ${parseInt(p.color.slice(5, 7), 16)}, ${p.alpha})`;
                 ctx.fill();
-                ctx.restore();
-                p.x += p.vx;
-                p.y += p.vy;
-                p.life--;
-                if (p.life <= 0) particles.splice(i, 1);
-            }
+            });
         }
 
         // --- Update functions ---
@@ -1528,12 +1472,10 @@ const characters = {
             // player.isFocusing is now controlled directly by event listeners (keyboard Shift or mobile focus button)
             const currentSpeed = player.isFocusing ? player.speed * player.focusSpeedMultiplier : player.speed;
 
-            if (!playerMovementFrozen) { // Only move if not frozen by boss skill
-                if (keys.ArrowUp || keys.KeyW) player.y -= currentSpeed;
-                if (keys.ArrowDown || keys.KeyS) player.y += currentSpeed;
-                if (keys.ArrowLeft || keys.KeyA) player.x -= currentSpeed;
-                if (keys.ArrowRight || keys.KeyD) player.x += currentSpeed;
-            }
+            if (keys.ArrowUp || keys.KeyW) player.y -= currentSpeed;
+            if (keys.ArrowDown || keys.KeyS) player.y += currentSpeed;
+            if (keys.ArrowLeft || keys.KeyA) player.x -= currentSpeed;
+            if (keys.ArrowRight || keys.KeyD) player.x += currentSpeed;
 
             player.x = Math.max(player.width / 2, Math.min(CANVAS_WIDTH - player.width / 2, player.x));
             player.y = Math.max(player.height / 2, Math.min(CANVAS_HEIGHT - player.height / 2, player.y));
@@ -2269,15 +2211,13 @@ const characters = {
                     const bulletSpeed = 4 + difficultyLevel * 0.2; // Faster bullets
                     const bulletRadius = 5 + difficultyLevel * 0.1;
                     const bulletColor = '#ff0000'; // Red for basic
-                    // Make spread wider at higher difficulties
-                    const spread = (difficultyLevel >= 10) ? Math.PI / 8 : 0;
-                    const angleToPlayer = Math.atan2(player.y - entity.y, player.x - entity.x) + (Math.random() - 0.5) * spread;
+                    const angleToPlayer = Math.atan2(player.y - entity.y, player.x - entity.x);
                     createBullet(entity.x, entity.y + entity.height / 2, angleToPlayer, bulletSpeed, bulletRadius, bulletColor, enemyProjectiles, false, 0, false, 'kiBlast'); // Added type
                     entity.bulletsShotInBurst--;
                 }
             } else if (entity.lastShotTime >= entity.shootInterval) { // Start a new burst
                 entity.lastShotTime = 0;
-                entity.bulletsShotInBurst = entity.rapidFireCount + Math.floor(difficultyLevel / 7); // More bullets in burst
+                entity.bulletsShotInBurst = entity.rapidFireCount;
                 entity.lastRapidFireBulletTime = 0; // Reset for the new burst
             }
         }
@@ -2364,135 +2304,134 @@ const characters = {
         function updateEnemies(deltaTime) {
             for (let i = enemies.length - 1; i >= 0; i--) {
                 const enemy = enemies[i];
+
+                // Apply boss time stop
                 const effectiveDeltaTime = bossTimeStopActive ? 0 : deltaTime;
+
                 if (enemy.frozen) {
                     enemy.freezeTimer -= effectiveDeltaTime;
                     if (enemy.freezeTimer <= 0) {
                         enemy.frozen = false;
-                        enemy.color = enemy.originalColor;
+                        enemy.color = enemy.originalColor; // Revert color
                     } else {
+                        // Skip movement and shooting if frozen
                         continue;
                     }
                 }
-                // --- Slime ---
-                if (enemy.skillType === 'slimeShot') {
-                    // Di chuyển chậm, thỉnh thoảng nhảy lên
-                    if (!enemy.jumpTimer) enemy.jumpTimer = Math.random() * 3 + 2;
-                    enemy.jumpTimer -= effectiveDeltaTime;
-                    if (enemy.jumpTimer <= 0) {
-                        enemy.vy = -2.5;
-                        enemy.jumpTimer = Math.random() * 3 + 2;
+
+                // Handle special skills
+                if (enemy.skillType === 'charge') {
+                    if (!enemy.isCharging && (enemy.lastSkillTime >= enemy.skillInterval)) {
+                        // Start charge
+                        enemy.isCharging = true;
+                        enemy.chargeTimer = enemyTypes.charger.chargeDuration;
+                        enemy.chargeTargetX = player.x; // Target player's current position
+                        enemy.chargeTargetY = player.y;
+                        enemy.lastSkillTime = 0; // Reset skill timer
+                        enemy.color = '#ff0000'; // Indicate charging
+                        // Emit particles when starting charge
+                        for (let p = 0; p < 10; p++) {
+                            createParticle(enemy.x, enemy.y, '#ffaa00'); // Orange particles
+                        }
                     }
-                    if (!enemy.vy) enemy.vy = 0;
-                    enemy.vy += 0.12; // Gravity
-                    enemy.y += enemy.vy;
-                    if (enemy.y > CANVAS_HEIGHT / 2 - enemy.height / 2) {
-                        enemy.y = CANVAS_HEIGHT / 2 - enemy.height / 2;
-                        if (enemy.vy > 1.5) {
-                            // Khi rơi xuống, văng ra 2 đạn nhỏ
-                            for (let b = -1; b <= 1; b += 2) {
-                                createBullet(enemy.x, enemy.y + enemy.height / 2, Math.PI / 2 + b * Math.PI / 8, 2, 5, '#7ec850', enemyProjectiles, false, 0, false, 'slimeSplit');
+
+                    if (enemy.isCharging) {
+                        // Move rapidly towards target
+                        const angleToTarget = Math.atan2(enemy.chargeTargetY - enemy.y, enemy.chargeTargetX - enemy.x);
+                        enemy.x += Math.cos(angleToTarget) * (enemyTypes.charger.chargeSpeed + difficultyLevel * 0.1) * effectiveDeltaTime; // Scale charge speed
+                        enemy.y += Math.sin(angleToTarget) * (enemyTypes.charger.chargeSpeed + difficultyLevel * 0.1) * effectiveDeltaTime;
+                        enemy.chargeTimer -= effectiveDeltaTime;
+                        if (enemy.chargeTimer <= 0) {
+                            enemy.isCharging = false;
+                            enemy.color = enemy.originalColor; // Revert color
+                            enemy.lastSkillTime = -enemyTypes.charger.chargeCooldown; // Apply cooldown
+                            // Emit particles when ending charge
+                            for (let p = 0; p < 10; p++) {
+                                createParticle(enemy.x, enemy.y, '#ffff00'); // Yellow particles
                             }
                         }
-                        enemy.vy = 0;
-                    }
-                    // Bắn đạn nhầy
-                    enemy.lastShotTime += effectiveDeltaTime;
-                    if (enemy.lastShotTime >= enemy.shootInterval) {
-                        enemy.lastShotTime = 0;
-                        createBullet(enemy.x, enemy.y + enemy.height / 2, Math.PI / 2, 1.5, 8, '#7ec850', enemyProjectiles, false, 0, false, 'slimeShot');
-                    }
-                // --- Fairy ---
-                } else if (enemy.skillType === 'fairySpread') {
+                    } else {
+                        // Regular movement when not charging
+                        if (enemy.movePattern === 'horizontal') {
                             enemy.x += enemy.moveSpeed * enemy.moveDirection * effectiveDeltaTime;
-                    enemy.y += Math.sin(performance.now() * 0.005 + enemy.x) * enemy.moveSpeed * 0.7 * effectiveDeltaTime;
+                            if (enemy.x - enemy.width / 2 < 0 || enemy.x + enemy.width / 2 > CANVAS_WIDTH) {
+                                enemy.moveDirection *= -1; // Reverse direction
+                            }
+                        } else if (enemy.movePattern === 'zigzag') {
+                            enemy.x += enemy.moveSpeed * enemy.moveDirection * effectiveDeltaTime;
+                            enemy.y += Math.sin(performance.now() * 0.005) * enemy.moveSpeed * 0.5 * effectiveDeltaTime; // Sine wave vertical movement
                             if (enemy.x - enemy.width / 2 < 0 || enemy.x + enemy.width / 2 > CANVAS_WIDTH) {
                                 enemy.moveDirection *= -1;
                             }
-                    // Bắn danmaku tỏa tròn 8 hướng, cầu vồng
-                    enemy.lastShotTime += effectiveDeltaTime;
-                    let fairyFireRate = enemy.health < 20 ? 0.7 : enemy.shootInterval;
-                    if (enemy.lastShotTime >= fairyFireRate) {
-                        enemy.lastShotTime = 0;
-                        for (let b = 0; b < 8; b++) {
-                            const angle = (Math.PI * 2 / 8) * b;
-                            const colors = ['#ff6666','#ffcc66','#66ff66','#66ccff','#cc66ff','#ff66cc','#ffff66','#66ffff'];
-                            createBullet(enemy.x, enemy.y, angle, 2.2, 7, colors[b], enemyProjectiles, false, 0, false, 'fairyDanmaku');
                         }
                     }
-                    // Gần chết tăng tốc
-                    if (enemy.health < 20) enemy.moveSpeed = 2.2;
-                // --- Yin-Yang Orb ---
-                } else if (enemy.skillType === 'homing') {
-                    // Bay lượn, bắn đạn homing xoay quanh rồi lao vào player
-                    if (!enemy.floatAngle) enemy.floatAngle = Math.random() * Math.PI * 2;
-                    enemy.floatAngle += 0.7 * effectiveDeltaTime;
-                    enemy.x += Math.cos(enemy.floatAngle) * 0.7;
-                    enemy.y += Math.sin(enemy.floatAngle) * 0.5;
-                    // Clamp
-                    enemy.x = Math.max(enemy.width / 2, Math.min(CANVAS_WIDTH - enemy.width / 2, enemy.x));
-                    enemy.y = Math.max(enemy.height / 2, Math.min(CANVAS_HEIGHT / 2 - enemy.height / 2, enemy.y));
-                    // Bắn đạn homing
+                } else if (enemy.skillType === 'hybrid') { // New logic for hybrid enemy
+                    enemy.lastAttackSwitchTime += effectiveDeltaTime;
                     enemy.lastShotTime += effectiveDeltaTime;
-                    if (enemy.lastShotTime >= enemy.shootInterval) {
-                        enemy.lastShotTime = 0;
-                        let angle = Math.atan2(player.y - enemy.y, player.x - enemy.x);
-                        createBullet(enemy.x, enemy.y, angle, 2.3, 9, '#ff2222', enemyProjectiles, true, 0.08, false, 'yinyangHoming');
+                    enemy.lastSkillTime += effectiveDeltaTime;
+
+                    if (enemy.lastAttackSwitchTime >= enemy.attackSwitchInterval) {
+                        enemy.currentAttackIndex = (enemy.currentAttackIndex + 1) % enemy.attackPatterns.length;
+                        enemy.lastAttackSwitchTime = 0; // Reset timer for new switch
+                        enemy.lastShotTime = 0; // Reset attack cooldown for new pattern
+                        enemy.lastSkillTime = 0; // Reset skill cooldown for new pattern
                     }
-                // --- Bat ---
-                } else if (enemy.skillType === 'dive') {
-                    // Di chuyển nhanh, thỉnh thoảng lướt cực nhanh
-                    if (!enemy.diveTimer) enemy.diveTimer = Math.random() * 3 + 2;
-                    enemy.diveTimer -= effectiveDeltaTime;
-                    if (enemy.diveTimer <= 0) {
-                        enemy.diveSpeed = 7;
-                        enemy.diveAngle = Math.atan2(player.y - enemy.y, player.x - enemy.x);
-                        enemy.diveTimer = Math.random() * 3 + 2;
+
+                    const currentPattern = enemy.attackPatterns[enemy.currentAttackIndex];
+                    switch (currentPattern) {
+                        case 'rapidFire':
+                            shootRapidFire(enemy, effectiveDeltaTime);
+                            break;
+                        case 'scatterShot':
+                            shootScatterShot(enemy, effectiveDeltaTime);
+                            break;
+                        case 'homingShot':
+                            shootHomingShot(enemy, effectiveDeltaTime);
+                            break;
+                        case 'waveShot':
+                            shootWaveShot(enemy, effectiveDeltaTime);
+                            break;
                     }
-                    if (enemy.diveSpeed && enemy.diveSpeed > 0.5) {
-                        enemy.x += Math.cos(enemy.diveAngle) * enemy.diveSpeed;
-                        enemy.y += Math.sin(enemy.diveAngle) * enemy.diveSpeed;
-                        enemy.diveSpeed *= 0.92;
+
+                    // Hybrid enemy movement (can be different from other types)
+                    if (enemy.movePattern === 'chase') {
+                        const angleToPlayer = Math.atan2(player.y - enemy.y, player.x - enemy.x);
+                        enemy.x += Math.cos(angleToPlayer) * enemy.moveSpeed * effectiveDeltaTime;
+                        enemy.y += Math.sin(angleToPlayer) * enemy.moveSpeed * effectiveDeltaTime;
+                    }
+
                 } else {
+                    // Regular enemy movement patterns for non-charging enemies
+                    if (enemy.movePattern === 'horizontal') {
                         enemy.x += enemy.moveSpeed * enemy.moveDirection * effectiveDeltaTime;
+                        if (enemy.x - enemy.width / 2 < 0 || enemy.x + enemy.width / 2 > CANVAS_WIDTH) {
+                            enemy.moveDirection *= -1; // Reverse direction
+                        }
+                    } else if (enemy.movePattern === 'zigzag') {
+                        enemy.x += enemy.moveSpeed * enemy.moveDirection * effectiveDeltaTime;
+                        enemy.y += Math.sin(performance.now() * 0.005) * enemy.moveSpeed * 0.5 * effectiveDeltaTime; // Sine wave vertical movement
                         if (enemy.x - enemy.width / 2 < 0 || enemy.x + enemy.width / 2 > CANVAS_WIDTH) {
                             enemy.moveDirection *= -1;
                         }
+                    } else if (enemy.movePattern === 'chase') {
+                        const angleToPlayer = Math.atan2(player.y - enemy.y, player.x - enemy.x);
+                        enemy.x += Math.cos(angleToPlayer) * enemy.moveSpeed * effectiveDeltaTime;
+                        enemy.y += Math.sin(angleToPlayer) * enemy.moveSpeed * effectiveDeltaTime;
                     }
-                // --- Ghost ---
-                } else if (enemy.skillType === 'ghostExplode') {
-                    enemy.y += enemy.moveSpeed * effectiveDeltaTime;
-                    // Đạn linh hồn xuyên tường
-                    enemy.lastShotTime += effectiveDeltaTime;
-                    if (enemy.lastShotTime >= enemy.shootInterval) {
-                        enemy.lastShotTime = 0;
-                        createBullet(enemy.x, enemy.y + enemy.height / 2, Math.PI / 2, 2.1, 8, '#66ccff', enemyProjectiles, false, 0, false, 'ghostSoul');
-                    }
+                    // Regular enemies still shoot bullets if not hybrid or charging
+                    enemyShootDispatcher(enemy, effectiveDeltaTime, enemy.skillType);
                 }
-                // Clamp vị trí cho các loại không xuyên tường
-                if (enemy.skillType !== 'ghostExplode') {
+
+
+                // Clamp enemy position to canvas bounds
                 enemy.x = Math.max(enemy.width / 2, Math.min(CANVAS_WIDTH - enemy.width / 2, enemy.x));
-                    enemy.y = Math.max(enemy.height / 2, Math.min(CANVAS_HEIGHT / 2 - enemy.height / 2, enemy.y));
-                }
-                // --- Bat khi chết phát nổ thành 3 đạn hình cánh dơi ---
+                enemy.y = Math.max(enemy.height / 2, Math.min(CANVAS_HEIGHT / 2 - enemy.height / 2, enemy.y)); // Keep enemies in upper half
+
+                // Check if enemy is defeated
                 if (enemy.health <= 0) {
-                    if (enemy.skillType === 'bat') {
-                        for (let b = 0; b < 3; b++) {
-                            const angle = (Math.PI * 2 / 3) * b;
-                            createBullet(enemy.x, enemy.y, angle, 2.5, 8, '#a060c0', enemyProjectiles, false, 0, false, 'batWing');
-                        }
-                    }
-                    // --- Ghost phát nổ thành vòng tròn đạn lớn, đạn mờ dần ---
-                    if (enemy.skillType === 'ghostExplode') {
-                        const numBullets = 12;
-                        for (let b = 0; b < numBullets; b++) {
-                            const angle = (Math.PI * 2 / numBullets) * b;
-                            createBullet(enemy.x, enemy.y, angle, 2.2, 7, '#66ccff', enemyProjectiles, false, 0, false, 'ghostExplode');
-                        }
-                    }
                     enemies.splice(i, 1);
-                    score += 20;
-                    playBossHitSFX();
+                    score += 20; // Reward for defeating enemy
+                    playBossHitSFX(); // Use boss hit SFX for enemy defeat
                 }
             }
         }
@@ -2544,8 +2483,6 @@ const characters = {
             phantomBlasters.length = 0;
             crushingDescents.length = 0; // Clear crushing descents
             bossTimeStopActive = false; // Reset boss time stop
-            playerMovementFrozen = false; // Reset player freeze
-            playerSkillsFrozen = false; // Reset player skills freeze
 
             difficultyLevel = 1; // Reset difficulty for boss fight patterns
             difficultyDisplay.textContent = `${currentLanguage === 'en' ? 'Difficulty: BOSS PHASE' : 'Độ khó: BOSS GIAI ĐOẠN'} ${currentBossPhaseIndex + 1}`;
@@ -2573,8 +2510,6 @@ const characters = {
                 bossTimeStopTimer -= deltaTime;
                 if (bossTimeStopTimer <= 0) {
                     bossTimeStopActive = false;
-                    playerMovementFrozen = false; // Unfreeze player movement
-                    playerSkillsFrozen = false; // Unfreeze player skills
                     // Time Manipulator performs an attack immediately after time stop ends
                     if (currentBossPhaseIndex === 3) { // Ensure it's the Time Manipulator
                         const patternRoll = Math.random();
@@ -2624,8 +2559,6 @@ const characters = {
                 enemyProjectiles.length = 0;
                 bulletTrails.length = 0;
                 bossTimeStopActive = false; // Reset boss time stop
-                playerMovementFrozen = false; // Reset player freeze
-                playerSkillsFrozen = false; // Reset player skills freeze
 
                 difficultyDisplay.textContent = `${currentLanguage === 'en' ? 'Difficulty: BOSS PHASE' : 'Độ khó: BOSS GIAI ĐOẠN'} ${currentBossPhaseIndex + 1}`;
                 playDifficultyUpSFX();
@@ -2648,7 +2581,7 @@ const characters = {
         function bossAttack(bossEntity, deltaTime, phaseIndex) {
             // The bossEntity.lastShotTime is now incremented in updateBoss, so we just check it here.
             // This function is only called if !bossTimeStopActive && !boss.frozen
-            // So, we just need to choose an attack.
+            // So, we just need to check if it's time to shoot.
 
             // bossEntity.lastShotTime is reset to 0 in updateBoss right before calling this function
             // if it's time to attack. So we don't need to check bossEntity.lastShotTime here.
@@ -2658,39 +2591,37 @@ const characters = {
                 case 0: // Shadow Weaver Phase (Cid): Energy Beams, Grenade Barrage
                     const patternRollP1 = Math.random();
                     if (patternRollP1 < 0.6) { // Existing beam attacks
-                        const beamWidth = 8 + difficultyLevel * 0.2; // Scale beam width
+                        const beamWidth = 8;
                         const beamLength = CANVAS_WIDTH * 1.5;
-                        let warningDuration = 1.5 - difficultyLevel * 0.05; // Shorter warning
-                        let activeDuration = 1.8 - difficultyLevel * 0.05; // Shorter active
+                        let warningDuration = 1.5;
+                        let activeDuration = 1.8;
                         const beamColor = '#00ff00';
 
                         const subPatternRoll = Math.random();
                         if (subPatternRoll < 0.3) { // Horizontal sweeping beam (common)
                             const startY = Math.random() * (CANVAS_HEIGHT / 2) + 50;
-                            const numSweeps = 2 + Math.floor(difficultyLevel / 10); // More sweeps
+                            const numSweeps = 2;
                             for (let i = 0; i < numSweeps; i++) {
                                 addTimer('timeout', () => {
                                     createBeamHazard(0, startY + i * 40, CANVAS_WIDTH, startY + i * 40, beamWidth, beamColor, warningDuration, activeDuration);
-                                }, i * (200 - difficultyLevel * 5)); // Faster sweeps
+                                }, i * 200);
                             }
                         } else if (subPatternRoll < 0.6) { // Aimed cross beams (common)
                             const angleToPlayer = Math.atan2(player.y - bossEntity.y, player.x - bossEntity.x);
-                            const numCrossBeams = 3 + Math.floor(difficultyLevel / 8); // More cross beams
-                            for (let i = 0; i < numCrossBeams; i++) {
-                                const angleOffset = (i - (numCrossBeams - 1) / 2) * (Math.PI / 6); // Spread
-                                createBeamHazard(bossEntity.x, bossEntity.y, bossEntity.x + Math.cos(angleToPlayer + angleOffset) * beamLength, bossEntity.y + Math.sin(angleToPlayer + angleOffset) * beamLength, beamWidth, beamColor, warningDuration, activeDuration);
-                            }
-                        } else if (subZonePatternRoll < 0.8) { // Converging Beams (new, moderate difficulty)
-                            const numConvergingBeams = 3 + Math.floor(difficultyLevel / 6);
+                            createBeamHazard(bossEntity.x, bossEntity.y, bossEntity.x + Math.cos(angleToPlayer) * beamLength, bossEntity.y + Math.sin(angleToPlayer) * beamLength, beamWidth, beamColor, warningDuration, activeDuration);
+                            createBeamHazard(bossEntity.x, bossEntity.y, bossEntity.x + Math.cos(angleToPlayer + Math.PI / 2) * beamLength, bossEntity.y + Math.sin(angleToPlayer + Math.PI / 2) * beamLength, beamWidth, beamColor, warningDuration, activeDuration);
+                            createBeamHazard(bossEntity.x, bossEntity.y, bossEntity.x + Math.cos(angleToPlayer - Math.PI / 2) * beamLength, bossEntity.y + Math.sin(angleToPlayer - Math.PI / 2) * beamLength, beamWidth, beamColor, warningDuration, activeDuration);
+                        } else if (subPatternRoll < 0.8) { // Converging Beams (new, moderate difficulty)
+                            const numConvergingBeams = 3;
                             for (let i = 0; i < numConvergingBeams; i++) {
                                 const startX = (i / (numConvergingBeams - 1)) * CANVAS_WIDTH;
                                 const startY = (i % 2 === 0) ? 0 : CANVAS_HEIGHT;
                                 addTimer('timeout', () => {
                                     createBeamHazard(startX, startY, player.x, player.y, beamWidth * 0.8, beamColor, warningDuration * 0.8, activeDuration * 0.8);
-                                }, i * (150 - difficultyLevel * 3));
+                                }, i * 150);
                             }
                         } else { // Grid Beams (new, harder, but scaled down)
-                            const numGridLines = 3 + Math.floor(difficultyLevel / 5);
+                            const numGridLines = 3;
                             for (let i = 0; i < numGridLines; i++) {
                                 // Horizontal
                                 createBeamHazard(0, (i + 1) * (CANVAS_HEIGHT / (numGridLines + 1)), CANVAS_WIDTH, (i + 1) * (CANVAS_HEIGHT / (numGridLines + 1)), beamWidth * 0.7, beamColor, warningDuration * 0.7, activeDuration * 0.7);
@@ -2705,30 +2636,30 @@ const characters = {
 
                 case 1: // Lich Overlord Phase (Overlord): Dark Zones, Abyssal Vortex
                     const zonePatternRollP2 = Math.random();
-                    let zoneRadius = 50 + difficultyLevel * 1.5; // Scale radius
+                    let zoneRadius = 50;
                     const zoneDamage = 1;
-                    let warningDurationZone = 1.2 - difficultyLevel * 0.03;
-                    let activeDurationZone = 2.5 - difficultyLevel * 0.05;
+                    let warningDurationZone = 1.2;
+                    let activeDurationZone = 2.5;
                     const zoneColor = '#330033';
 
                     if (zonePatternRollP2 < 0.5) { // Existing dark zone attacks
                         const subZonePatternRoll = Math.random();
                         if (subZonePatternRoll < 0.35) { // Static zones at player and random spots
                             createDarkZone(player.x, player.y, zoneRadius, zoneDamage, warningDurationZone, activeDurationZone, zoneColor);
-                            const numRandomZones = 1 + Math.floor(difficultyLevel / 9); // More random zones
+                            const numRandomZones = 1;
                             for (let i = 0; i < numRandomZones; i++) {
                                 const randX = Math.random() * CANVAS_WIDTH;
                                 const randY = Math.random() * (CANVAS_HEIGHT - 100) + 50;
                                 createDarkZone(randX, randY, zoneRadius * 0.7, zoneDamage, warningDurationZone * 0.8, activeDurationZone * 0.8, zoneColor);
                             }
                         } else if (subZonePatternRoll < 0.65) { // Moving dark zones
-                            const numMovingZones = 1 + Math.floor(difficultyLevel / 7);
+                            const numMovingZones = 1;
                             for (let i = 0; i < numMovingZones; i++) {
                                 const startX = Math.random() * CANVAS_WIDTH;
                                 const startY = Math.random() * (CANVAS_HEIGHT / 2);
                                 const targetX = Math.random() * CANVAS_WIDTH;
                                 const targetY = Math.random() * (CANVAS_HEIGHT / 2);
-                                const moveSpeed = 30 + difficultyLevel * 0.5; // Faster moving zones
+                                const moveSpeed = 30;
                                 createMovingDarkZone(startX, startY, zoneRadius * 0.8, zoneDamage, warningDurationZone, activeDurationZone, zoneColor, targetX, targetY, moveSpeed);
                             }
                         } else if (subZonePatternRoll < 0.85) { // Expanding/Shrinking Zones (new)
@@ -2737,13 +2668,13 @@ const characters = {
                             const y = Math.random() * (CANVAS_HEIGHT / 2 - zoneRadius * 2) + zoneRadius;
                             createDarkZone(x, y, zoneRadius, zoneDamage, warningDurationZone * 0.9, activeDurationZone * 0.9, zoneColor, zoneType);
                         } else { // Chaining Zones (new, slightly harder)
-                            const numChains = 3 + Math.floor(difficultyLevel / 6);
+                            const numChains = 3;
                             for (let i = 0; i < numChains; i++) {
                                 addTimer('timeout', () => {
                                     const x = Math.random() * (CANVAS_WIDTH - zoneRadius * 2) + zoneRadius;
                                     const y = Math.random() * (CANVAS_HEIGHT / 2 - zoneRadius * 2) + zoneRadius;
                                     createDarkZone(x, y, zoneRadius * 0.7, zoneDamage, warningDurationZone * 0.7, activeDurationZone * 0.7, zoneColor);
-                                }, i * (500 - difficultyLevel * 10)); // Faster chaining
+                                }, i * 500);
                             }
                         }
                     } else { // New: Abyssal Vortex (Overlord)
@@ -2753,14 +2684,14 @@ const characters = {
 
                 case 2: // Spirit of Retribution Phase (Sans): Spectral Spikes, Phantom Blasters, Bone Walls, Gaster Blaster Barrage
                     const retributionPatternP3 = Math.random();
-                    let spikeSpeed = 3 + difficultyLevel * 0.1;
+                    let spikeSpeed = 3;
                     let blasterSize = 40;
-                    let blasterChargeDuration = 1.2 - difficultyLevel * 0.03;
-                    let blasterFireDuration = 0.7 - difficultyLevel * 0.02;
+                    let blasterChargeDuration = 1.2;
+                    let blasterFireDuration = 0.7;
 
                     if (retributionPatternP3 < 0.3) { // Spectral Spike attack (common)
-                        const spikeWidth = 20 + difficultyLevel * 0.1;
-                        const spikeHeight = 80 + difficultyLevel * 0.1;
+                        const spikeWidth = 20;
+                        const spikeHeight = 80;
                         const spikeColor = '#ffffff';
 
                         // Horizontal spike wall with gaps
@@ -2806,17 +2737,17 @@ const characters = {
 
         // Phase 1 (Cid) - Grenade Barrage
         function shootGrenadeBarrage(bossEntity) {
-            const numGrenades = 3 + Math.floor(difficultyLevel / 5); // More grenades
-            const grenadeSpeed = 3 + difficultyLevel * 0.1; // Faster initial speed
+            const numGrenades = 3;
+            const grenadeSpeed = 3; // Slower initial speed
             const grenadeRadius = 15;
             const grenadeColor = '#666666'; // Dark grey
-            const explosionY = player.y - (50 + difficultyLevel * 5); // Explode closer to player at higher difficulty
+            const explosionY = player.y - 100; // Explode above player
 
             for (let i = 0; i < numGrenades; i++) {
-                const angle = Math.atan2(explosionY - bossEntity.y, player.x - bossEntity.x) + (Math.random() - 0.5) * (Math.PI / (8 - difficultyLevel * 0.1)); // Aimed with slight spread
+                const angle = Math.atan2(explosionY - bossEntity.y, player.x - bossEntity.x) + (Math.random() - 0.5) * (Math.PI / 8); // Aimed with slight spread
                 addTimer('timeout', () => {
                     createBullet(bossEntity.x, bossEntity.y, angle, grenadeSpeed, grenadeRadius, grenadeColor, enemyProjectiles, false, 0, false, 'grenade', explosionY);
-                }, i * (300 - difficultyLevel * 5)); // Staggered launch, faster
+                }, i * 300); // Staggered launch
             }
             // Play a grenade launch SFX
             playGrenadeLaunchSFX();
@@ -2840,8 +2771,8 @@ const characters = {
         function createAbyssalVortex(bossEntity) {
             const vortexRadius = 80 + difficultyLevel * 2; // Scales with difficulty
             const vortexDamage = 1;
-            const warningDurationVortex = 1.8 - difficultyLevel * 0.05;
-            const activeDurationVortex = 4 - difficultyLevel * 0.08;
+            const warningDurationVortex = 1.8;
+            const activeDurationVortex = 4;
             const vortexColor = '#1a001a'; // Very dark purple
             const vortexSpeed = 0.5 + difficultyLevel * 0.02; // Slow movement
 
@@ -2856,30 +2787,28 @@ const characters = {
 
         // Phase 3 (Sans) - Bone Walls
         function createBoneWall(bossEntity, isVertical) {
-            const boneWidth = 25 + difficultyLevel * 0.1;
-            const boneHeight = 70 + difficultyLevel * 0.1;
+            const boneWidth = 25;
+            const boneHeight = 70;
             const boneColor = '#f0f0f0'; // Light grey
             const wallSpeed = 2 + difficultyLevel * 0.05;
 
             if (isVertical) {
                 const numBones = Math.floor(CANVAS_HEIGHT / (boneHeight + 20));
-                const gapSize = 2 - Math.floor(difficultyLevel / 15); // Smaller gap at higher difficulty
-                const gapPosition = Math.floor(Math.random() * (numBones - gapSize));
+                const gapPosition = Math.floor(Math.random() * (numBones - 1));
                 const startX = Math.random() < 0.5 ? 0 : CANVAS_WIDTH - boneWidth; // From left or right
 
                 for (let i = 0; i < numBones; i++) {
-                    if (i < gapPosition || i >= gapPosition + gapSize) { // Create a gap of `gapSize` bones
+                    if (i !== gapPosition && i !== gapPosition + 1) { // Create a gap of 2 bones
                         createSpectralSpike(startX, i * (boneHeight + 20), boneWidth, boneHeight, startX === 0 ? wallSpeed : -wallSpeed, 0, boneColor);
                     }
                 }
             } else { // Horizontal
                 const numBones = Math.floor(CANVAS_WIDTH / (boneWidth + 20));
-                const gapSize = 2 - Math.floor(difficultyLevel / 15); // Smaller gap at higher difficulty
-                const gapPosition = Math.floor(Math.random() * (numBones - gapSize));
+                const gapPosition = Math.floor(Math.random() * (numBones - 1));
                 const startY = Math.random() < 0.5 ? 0 : CANVAS_HEIGHT - boneHeight; // From top or bottom
 
                 for (let i = 0; i < numBones; i++) {
-                    if (i < gapPosition || i >= gapPosition + gapSize) { // Create a gap of `gapSize` bones
+                    if (i !== gapPosition && i !== gapPosition + 1) { // Create a gap of 2 bones
                         createSpectralSpike(i * (boneWidth + 20), startY, boneWidth, boneHeight, 0, startY === 0 ? wallSpeed : -wallSpeed, boneColor);
                     }
                 }
@@ -2890,17 +2819,17 @@ const characters = {
         // Phase 3 (Sans) - Gaster Blaster Barrage
         function createGasterBlasterBarrage(bossEntity) {
             const numBlasters = 3 + Math.floor(difficultyLevel / 5);
-            const blasterSize = 35 + difficultyLevel * 0.2;
-            const blasterChargeDuration = 0.8 - difficultyLevel * 0.02;
-            const blasterFireDuration = 0.5 - difficultyLevel * 0.01;
+            const blasterSize = 35;
+            const blasterChargeDuration = 0.8;
+            const blasterFireDuration = 0.5;
             const blasterColor = '#00ffff'; // Cyan for Gaster Blasters
 
             for (let i = 0; i < numBlasters; i++) {
-                const angleOffset = (i - (numBlasters - 1) / 2) * (Math.PI / (10 - difficultyLevel * 0.1)); // Spread angle
+                const angleOffset = (i - (numBlasters - 1) / 2) * (Math.PI / 10); // Spread angle
                 const targetAngle = Math.atan2(player.y - bossEntity.y, player.x - bossEntity.x) + angleOffset;
                 addTimer('timeout', () => {
                     createPhantomBlaster(bossEntity.x, bossEntity.y, bossEntity.x + Math.cos(targetAngle) * 500, bossEntity.y + Math.sin(targetAngle) * 500, blasterSize, blasterChargeDuration, blasterFireDuration, blasterColor);
-                }, i * (200 - difficultyLevel * 4)); // Staggered firing, faster
+                }, i * 200); // Staggered firing
             }
             // Blaster SFX are handled in updatePhantomBlasters
         }
@@ -2913,10 +2842,10 @@ const characters = {
             const punchColor = '#ff0000'; // Red for Fist of Fury
 
             for (let i = 0; i < numPunches; i++) {
-                const angle = Math.atan2(player.y - bossEntity.y, player.x - bossEntity.x) + (Math.random() - 0.5) * (Math.PI / (6 - difficultyLevel * 0.05)); // Aimed with slight spread
+                const angle = Math.atan2(player.y - bossEntity.y, player.x - bossEntity.x) + (Math.random() - 0.5) * (Math.PI / 6); // Aimed with slight spread
                 addTimer('timeout', () => {
                     createBullet(bossEntity.x, bossEntity.y, angle, punchSpeed, punchRadius, punchColor, enemyProjectiles, false, 0, false, 'fistOfFury');
-                }, i * (50 - difficultyLevel)); // Rapid fire, faster
+                }, i * 50); // Rapid fire
             }
             playFistOfFurySFX();
         }
@@ -2925,8 +2854,6 @@ const characters = {
         function activateBossTemporalStasis(bossEntity, duration) {
             bossTimeStopActive = true;
             bossTimeStopTimer = duration; // This timer will be decremented in updateBoss
-            playerMovementFrozen = true; // Freeze player movement
-            playerSkillsFrozen = true; // Freeze player skills
             playTemporalStasisSFX();
 
             // Move boss to a new random position during time stop
@@ -2946,10 +2873,10 @@ const characters = {
             const knifeColor = '#cccccc'; // Silver
 
             for (let i = 0; i < numKnives; i++) {
-                const angle = Math.atan2(player.y - bossEntity.y, player.x - bossEntity.x) + (i - (numKnives - 1) / 2) * (Math.PI / (12 - difficultyLevel * 0.1)); // Fan spread
+                const angle = Math.atan2(player.y - bossEntity.y, player.x - bossEntity.x) + (i - (numKnives - 1) / 2) * (Math.PI / 12); // Fan spread
                 addTimer('timeout', () => {
                     createBullet(bossEntity.x, bossEntity.y, angle, knifeSpeed, knifeRadius, knifeColor, enemyProjectiles, false, 0, false, 'knife');
-                }, i * (80 - difficultyLevel * 2)); // Staggered throw, faster
+                }, i * 80); // Staggered throw
             }
             playKnifeThrowSFX();
         }
@@ -3496,110 +3423,276 @@ const characters = {
         }
 
         // --- Skill function ---
-        function useSkill(idx) {
-            const char = characters[currentCharKey];
-            const skill = char.skills[idx];
-            if (!isSkillUnlocked(skill, idx)) {
-                alert('Chưa đủ điều kiện mở khóa!');
-                return;
-            }
-            if (skillCooldowns[idx] > 0) {
-                alert('Skill đang hồi chiêu!');
-                return;
-            }
-            // Kích hoạt skill thực tế
-            switch (skill.id) {
-                case 'sealBurst': // Z - Clear đạn quanh người
-                    // Xóa tất cả đạn địch trong bán kính 120px quanh player
-                    for (let i = enemyProjectiles.length - 1; i >= 0; i--) {
-                        const dx = enemyProjectiles[i].x - player.x;
-                        const dy = enemyProjectiles[i].y - player.y;
-                        if (Math.sqrt(dx*dx + dy*dy) < 120) {
-                            enemyProjectiles.splice(i, 1);
-                        }
-                    }
-                    // Hiệu ứng sáng quanh player
-                    for (let a = 0; a < 20; a++) {
-                        particles.push({x: player.x, y: player.y, vx: Math.cos(a/20*2*Math.PI)*3, vy: Math.sin(a/20*2*Math.PI)*3, r: 6, color: '#00ffff', life: 20});
-                    }
-                    break;
-                case 'spiritClone': // X - Tạo phân thân bắn phụ (bắn thêm 1 loạt đạn phụ)
-                    for (let i = 0; i < 8; i++) {
-                        const angle = (Math.PI * 2 / 8) * i;
-                        playerProjectiles.push({x: player.x, y: player.y, vx: Math.cos(angle)*5, vy: Math.sin(angle)*5, radius: 7, color: '#fff', damage: 1, life: 60});
-                    }
-                    // Hiệu ứng clone
-                    particles.push({x: player.x+30, y: player.y, vx: 0, vy: 0, r: 12, color: '#fff', life: 15});
-                    particles.push({x: player.x-30, y: player.y, vx: 0, vy: 0, r: 12, color: '#fff', life: 15});
-                    break;
-                case 'fantasySeal': // R - Bắn đạn homing cực mạnh
-                    for (let i = 0; i < 5; i++) {
-                        const angle = (Math.PI * 2 / 5) * i;
-                        playerProjectiles.push({x: player.x, y: player.y, vx: Math.cos(angle)*4, vy: Math.sin(angle)*4, radius: 12, color: '#ff0', damage: 3, homing: true, life: 80});
-                    }
-                    // Hiệu ứng sáng mạnh
-                    for (let a = 0; a < 30; a++) {
-                        particles.push({x: player.x, y: player.y, vx: Math.cos(a/30*2*Math.PI)*4, vy: Math.sin(a/30*2*Math.PI)*4, r: 8, color: '#fff', life: 25});
-                    }
-                    break;
-                case 'divineBarrier': // F - Khiên bất tử, clear toàn bộ đạn
-                    enemyProjectiles.length = 0; // Xóa sạch đạn địch
-                    // Khiên bất tử 2 giây
-                    player.invincible = true;
-                    setTimeout(() => { player.invincible = false; }, 2000);
-                    // Hiệu ứng khiên
-                    particles.push({x: player.x, y: player.y, vx: 0, vy: 0, r: 40, color: '#0ff', life: 30});
-                    break;
-                default:
-                    alert(`Dùng skill: ${skill.name}`);
-            }
-            skillCooldowns[idx] = skill.cooldown;
-            // Nếu là skill R cần energy thì trừ energy, F cần kills thì trừ kills
-            if (skill.type === 'ultimate' && skill.unlock) {
-                if (skill.unlock.energy) energy = 0;
-                if (skill.unlock.kills) kills = 0;
-            }
-            renderSkillButtons();
-        }
-        // --- Passive tự động áp dụng trong game loop ---
-        function applyPassive() {
-            const passive = player.passive;
-            if (!passive) return;
-            switch (passive.type) {
-                case 'auraOfSerenity':
-                    enemyProjectiles.forEach(b => b.speed *= (1 - passive.value));
-                    break;
-                case 'arcaneFlow':
-                    player.activeSkills.forEach(s => s.cooldown *= (1 - passive.value));
-                    break;
-                case 'limitless':
-                    if (player.hp < player.maxHp) player.hp += passive.value;
-                    break;
-                case 'returnByDeath':
-                    // Né tránh ngẫu nhiên khi bị trúng đạn (xử lý trong collision)
-                    break;
-                case 'berserk':
-                    if (player.hp < player.maxHp * 0.3) player.damageBoostActive = true;
-                    else player.damageBoostActive = false;
-                    break;
-            }
-        }
-        // --- Gọi applyPassive() trong game loop ---
+        function useSkill(skillIndex) {
+            if (!gameRunning || gamePaused) return;
+            
+            const currentTime = performance.now() / 1000; // in seconds
+            const skill = player.activeSkills[skillIndex];
+            if (!skill) return; // Should not happen if skillIndex is 0 or 1
 
-        // --- Cập nhật UI, tooltip cho từng skill ---
-        function updateSkillButtonState() {
-            player.activeSkills.forEach((skill, i) => {
-                const btn = [skill1Button, skill2Button, skill3Button, skill4Button][i];
-                if (!btn) return;
-                const now = performance.now() / 1000;
-                const timeLeft = Math.max(0, skill.cooldown - (now - (skill.lastUseTime || 0)));
-                btn.disabled = timeLeft > 0;
-                btn.style.opacity = btn.disabled ? 0.5 : 1;
-                btn.title = `${skill.description.vi} (CD: ${Math.ceil(timeLeft)}s)`;
-                btn.innerHTML = `${['Z','X','R','F'][i]}<br><span>${skill.description.vi}${timeLeft > 0 ? `<br>(${Math.ceil(timeLeft)}s)` : ''}</span>`;
-            });
+            let actualSkillCooldown = skill.cooldown;
+            // Marisa's passive: Arcane Flow skill cooldown reduction
+            if (player.passive && player.passive.type === 'arcaneFlow') {
+                actualSkillCooldown *= (1 - player.passive.value);
+            }
+
+            if ((currentTime - skill.lastUseTime) >= actualSkillCooldown) {
+                // Create particles for skill effect (general for all skills)
+                for (let i = 0; i < 50; i++) {
+                    createParticle(player.x, player.y, player.color);
+                }
+
+                switch (skill.id) {
+                    case 'spiritualSealBurst': // Reimu Skill 1
+                        enemyProjectiles.length = 0;
+                        bulletTrails.length = 0;
+                        beams.length = 0; // Clear boss attacks too
+                        darkZones.length = 0;
+                        spectralSpikes.length = 0;
+                        phantomBlasters.length = 0;
+                        crushingDescents.length = 0; // Clear crushing descents
+                        // Add a visual burst effect
+                        for (let i = 0; i < 100; i++) {
+                            const angle = Math.random() * Math.PI * 2;
+                            const speed = Math.random() * 10 + 5;
+                            createParticle(player.x, player.y, '#ff4500', Math.random() * 8 + 3, Math.cos(angle) * speed, Math.sin(angle) * speed, 1, 0.03, 0.9);
+                        }
+                        // Deal damage to nearby enemies/boss
+                        enemies.forEach(enemy => {
+                            const dx = player.x - enemy.x;
+                            const dy = player.y - enemy.y;
+                            const distance = Math.sqrt(dx * dx + dy * dy);
+                            if (distance < skill.clearRadius) {
+                                enemy.health -= skill.damage;
+                            }
+                        });
+                        if (bossActive && boss) {
+                            const dx = player.x - boss.x;
+                            const dy = player.y - boss.y;
+                            const distance = Math.sqrt(dx * dx + dy * dy);
+                            if (distance < skill.clearRadius + Math.max(boss.width, boss.height) / 2) {
+                                boss.health -= skill.damage * 0.5; // Less damage to boss
+                            }
+                        }
+                        playSkillActivateSFX();
+                        break;
+                    case 'illusoryDuplicate': // Reimu Skill 2
+                        const numClones = skill.numClones;
+                        const cloneBulletSpeed = 5;
+                        const cloneBulletRadius = 4;
+                        const cloneColor = '#00ffff'; // Reimu's color
+                        playSkillActivateSFX();
+
+                        for (let i = 0; i < numClones; i++) {
+                            const cloneX = player.x + (Math.random() - 0.5) * 100;
+                            const cloneY = player.y + (Math.random() - 0.5) * 50;
+                            // Create a temporary "clone" that shoots
+                            addTimer('interval', () => { // Use addTimer
+                                if (gameRunning && !gamePaused) {
+                                    const angleToEnemy = Math.atan2(enemies[0]?.y - cloneY || boss?.y - cloneY, enemies[0]?.x - cloneX || boss?.x - cloneX);
+                                    createBullet(cloneX, cloneY, angleToEnemy, cloneBulletSpeed, cloneBulletRadius, cloneColor, playerProjectiles, false, 0, false, 'illusoryCloneBullet');
+                                }
+                            }, 500); // Shoot every 0.5 seconds
+                        }
+                        // Clones will disappear after skill.duration
+                        addTimer('timeout', () => {
+                            // Logic to remove clones or stop their shooting (if implemented as actual objects)
+                            // This implementation assumes the clones are just temporary shooting effects.
+                        }, skill.duration * 1000);
+                        break;
+                    case 'spiralOrbBarrage': // Marisa Skill 1
+                        playMarisaSkillSFX();
+                        createBullet(player.x, player.y, -Math.PI / 2, skill.speed, skill.radius, '#0000ff', playerProjectiles, false, 0, skill.piercing, 'spiralOrb');
+                        break;
+                    case 'lightningDash': // Marisa Skill 2
+                        playLightningDashSFX();
+                        const dashTargetY = player.y - 200; // Dash upwards
+                        const originalPlayerSpeed = player.speed;
+                        player.speed = skill.dashSpeed; // Temporarily increase speed for dash
+                        isInvincible = true;
+                        invincibleTimer = skill.invincibilityDuringDash;
+                        player.isDashing = true; // Set dashing flag
+
+                        // Store the interval ID for cleanup
+                        let lightningDashIntervalId = addTimer('interval', () => { // Use addTimer
+                            if (player.y > dashTargetY && gameRunning && !gamePaused) {
+                                player.y -= player.speed * (1/60); // Move frame by frame
+                                // Clear bullets during dash and damage enemies
+                                for (let i = enemyProjectiles.length - 1; i >= 0; i--) {
+                                    const bullet = enemyProjectiles[i];
+                                    const dx = player.x - bullet.x;
+                                    const dy = player.y - bullet.y;
+                                    const distance = Math.sqrt(dx * dx + dy * dy);
+                                    if (distance < 50) { // Clear bullets in a small radius
+                                        enemyProjectiles.splice(i, 1);
+                                    }
+                                }
+                                enemies.forEach(enemy => {
+                                    const dx = player.x - enemy.x;
+                                    const dy = player.y - enemy.y;
+                                    const distance = Math.sqrt(dx * dx + dy * dy);
+                                    if (distance < player.width / 2 + enemy.width / 2) { // Collision with enemy
+                                        enemy.health -= skill.damage * (1/60); // Continuous damage during dash
+                                    }
+                                });
+                                if (bossActive && boss) {
+                                    const dx = player.x - boss.x;
+                                    const dy = player.y - boss.y;
+                                    const distance = Math.sqrt(dx * dx + dy * dy);
+                                    if (distance < player.width / 2 + boss.width / 2) {
+                                        boss.health -= skill.damage * 0.5 * (1/60); // Continuous damage to boss
+                                    }
+                                }
+                                // Add dash particles/afterimage
+                                createParticle(player.x + (Math.random() - 0.5) * 10, player.y + (Math.random() - 0.5) * 10, player.color, Math.random() * 3 + 1, (Math.random() - 0.5) * 5, (Math.random() - 0.5) * 5, 0.5, 0.05, 0.9);
+                            } else {
+                                clearSpecificTimer(lightningDashIntervalId); // Clear this specific interval
+                                player.speed = originalPlayerSpeed; // Revert speed
+                                player.isDashing = false; // Reset dashing flag when dash ends
+                            }
+                        }, 1000 / 60); // 60 FPS update
+
+                        addTimer('timeout', () => { // Use addTimer
+                            isInvincible = false;
+                        }, skill.invincibilityDuringDash * 1000);
+                        break;
+                    case 'temporalBlink': // Sakuya Skill 1
+                        playSakuyaSkillSFX();
+                        const dashAngle = -Math.PI / 2; // Always dash upwards for now
+                        player.x += Math.cos(dashAngle) * skill.dashDistance;
+                        player.y += Math.sin(dashAngle) * skill.dashDistance;
+                        player.x = Math.max(player.width / 2, Math.min(CANVAS_WIDTH - player.width / 2, player.x));
+                        player.y = Math.max(player.height / 2, Math.min(CANVAS_HEIGHT - player.height / 2, player.y));
+                        isInvincible = true;
+                        invincibleTimer = skill.invincibilityDuration;
+                        break;
+                    case 'windBladeVolley': // Sakuya Skill 2
+                        playWindBladeSFX();
+                        const numWindBlades = skill.numProjectiles;
+                        const windBladeSpeed = skill.speed;
+                        const windBladeRadius = skill.radius;
+                        const windBladeColor = '#87ceeb'; // Light blue for air blades
+
+                        for (let i = 0; i < numWindBlades; i++) {
+                            const angle = -Math.PI / 2 + (i - (numWindBlades - 1) / 2) * (Math.PI / 6); // Cone spread
+                            createBullet(player.x, player.y, angle, windBladeSpeed, windBladeRadius, windBladeColor, playerProjectiles, false, 0, false, 'windBlade');
+                        }
+                        break;
+                    case 'overdrivePulse': // Youmu Skill 1
+                        playSkillActivateSFX(); // General skill activate for Youmu
+                        const originalYoumuSpeed = player.speed;
+                        const originalBulletSlowActive = bulletSlowEffectActive;
+                        const originalBulletSlowTimer = bulletSlowTimer;
+
+                        player.speed *= skill.speedMultiplier;
+                        bulletSlowEffectActive = true;
+                        bulletSlowTimer = skill.duration;
+
+                        addTimer('timeout', () => {
+                            player.speed = originalYoumuSpeed;
+                            bulletSlowEffectActive = originalBulletSlowActive;
+                            bulletSlowTimer = originalBulletSlowTimer;
+                        }, skill.duration * 1000);
+                        break;
+                    case 'rapidStrikeFlurry': // Youmu Skill 2
+                        playRapidStrikeSFX();
+                        const numRapidStrikes = skill.numProjectiles;
+                        const rapidStrikeSpeed = skill.speed;
+                        const rapidStrikeRadius = skill.radius;
+                        const rapidStrikeColor = '#ff0000'; // Red for strikes
+
+                        for (let i = 0; i < numRapidStrikes; i++) {
+                            const angle = -Math.PI / 2 + (i - (numRapidStrikes - 1) / 2) * (Math.PI / 4); // Wide cone
+                            addTimer('timeout', () => {
+                                createBullet(player.x, player.y, angle, rapidStrikeSpeed, rapidStrikeRadius, rapidStrikeColor, playerProjectiles, false, 0, false, 'strikeProjectile');
+                            }, i * 30); // Very rapid fire
+                        }
+                        break;
+                    case 'absoluteZeroForm': // Cirno Skill 1
+                        playSkillActivateSFX(); // General skill activate for Cirno
+                        isInvincible = true;
+                        invincibleTimer = skill.invincibilityDuration;
+                        player.damageBoostActive = true; // Activate damage boost
+                        // Clear all bullets and boss attacks
+                        enemyProjectiles.length = 0;
+                        bulletTrails.length = 0;
+                        beams.length = 0;
+                        darkZones.length = 0;
+                        spectralSpikes.length = 0;
+                        phantomBlasters.length = 0;
+                        crushingDescents.length = 0;
+
+                        // Visual effect for Absolute Zero Form
+                        for (let i = 0; i < 150; i++) {
+                            const angle = Math.random() * Math.PI * 2;
+                            const speed = Math.random() * 15 + 5;
+                            createParticle(player.x, player.y, '#ffffff', Math.random() * 10 + 5, Math.cos(angle) * speed, Math.sin(angle) * speed, 1, 0.02, 0.9);
+                        }
+
+                        addTimer('timeout', () => {
+                            player.damageBoostActive = false; // Deactivate damage boost
+                        }, skill.duration * 1000);
+                        break;
+                    case 'glacialBeam': // Cirno Skill 2
+                        playGlacialBeamSFX();
+                        const glacialBeamSpeed = skill.speed;
+                        const glacialBeamWidth = skill.width;
+                        const glacialBeamLength = skill.length;
+                        const glacialBeamDamage = skill.damage;
+                        const glacialBeamColor = '#800080'; // Purple for Glacial Beam
+
+                        // Create a temporary beam that moves with the player
+                        const glacialBeam = {
+                            startX: player.x,
+                            startY: player.y,
+                            endX: player.x,
+                            endY: player.y - glacialBeamLength,
+                            width: glacialBeamWidth,
+                            color: glacialBeamColor,
+                            activeTimer: 1.0, // Glacial Beam fires for a short duration
+                            maxActive: 1.0,
+                            state: 'active',
+                            isPlayerSpark: true, // Custom property to identify
+                            damage: glacialBeamDamage,
+                            piercing: skill.piercing
+                        };
+                        beams.push(glacialBeam);
+                        break;
+                }
+
+                skill.lastUseTime = currentTime; // Set last use time for cooldown
+                updateSkillButtonState();
+            }
         }
-        // ... existing code ...
+
+        function updateSkillButtonState() {
+            const currentTime = performance.now() / 1000;
+            
+            player.activeSkills.forEach((skill, index) => {
+                let actualSkillCooldown = skill.cooldown;
+                if (player.passive && player.passive.type === 'arcaneFlow') {
+                    actualSkillCooldown *= (1 - player.passive.value);
+                }
+
+                const timeSinceLastUse = currentTime - skill.lastUseTime;
+                const button = index === 0 ? skill1Button : skill2Button;
+                
+                if (timeSinceLastUse < actualSkillCooldown) {
+                    button.disabled = true;
+                    const timeLeft = Math.ceil(actualSkillCooldown - timeSinceLastUse);
+                    button.textContent = `${texts[currentLanguage][`skill${index + 1}`]}: (${timeLeft}s)`;
+                } else {
+                    button.disabled = false;
+                    button.textContent = `${texts[currentLanguage][`skill${index + 1}`]}: ∞`;
+                }
+            });
+            
+            // Schedule next update to show countdown if any skill is on cooldown
+            if (player.activeSkills.some(skill => (currentTime - skill.lastUseTime) < (player.passive && player.passive.type === 'arcaneFlow' ? skill.cooldown * (1 - player.passive.value) : skill.cooldown))) {
+                addTimer('timeout', updateSkillButtonState, 1000); // Use addTimer
+            }
+        }
+
 
         // --- Pause/Resume game function ---
         function togglePause() {
@@ -3621,26 +3714,10 @@ const characters = {
                     Tone.Transport.start();
                     masterGain.gain.linearRampToValueAtTime(0.4, Tone.context.currentTime + 0.2);
                 }
-                requestAnimationFrame(gameLoop);
             }
-        }
-
-        // --- Main game loop ---
-        function gameLoop(currentTime) {
-            if (!gameRunning || gamePaused) return;
-
-            const deltaTime = (currentTime - lastFrameTime) / 1000;
-            lastFrameTime = currentTime;
-
-            score = Math.floor((currentTime - startTime) / 1000);
-            scoreDisplay.textContent = `${texts[currentLanguage].score}: ${score}`;
-
-            // Handle Youmu's Overdrive Pulse effect (bullet slow)
+            
             if (bulletSlowEffectActive) {
-                bulletSlowTimer -= deltaTime;
-                if (bulletSlowTimer <= 0) {
-                    bulletSlowEffectActive = false;
-                }
+                bulletSlowEffectActive = false; // Reset bullet slow effect on pause
             }
 
             // Check for boss spawn
@@ -3659,10 +3736,28 @@ const characters = {
                     playDifficultyUpSFX(); // Play SFX when difficulty increases
                 }
 
-                // Sửa đoạn random enemyType khi spawn enemy
+                // Spawn new enemy if below MAX_ENEMIES_ON_SCREEN
                 if (enemies.length < MAX_ENEMIES_ON_SCREEN) {
-                    const enemyTypesArray = Object.keys(enemyTypes); // Lấy đúng các key hiện tại
-                    const randomEnemyType = enemyTypesArray[Math.floor(Math.random() * enemyTypesArray.length)];
+                    const enemyTypesArray = Object.keys(enemyTypes);
+                    // Prioritize special enemies at higher difficulty
+                    let availableEnemyTypes = ['basic'];
+                    if (difficultyLevel >= 3) {
+                        availableEnemyTypes.push('charger');
+                    }
+                    if (difficultyLevel >= 5) {
+                        availableEnemyTypes.push('scatter');
+                    }
+                    if (difficultyLevel >= 8) {
+                        availableEnemyTypes.push('wave');
+                    }
+                    if (difficultyLevel >= 12) {
+                        availableEnemyTypes.push('homing');
+                    }
+                    if (difficultyLevel >= 15) { // Hybrid enemy appears at higher difficulty
+                        availableEnemyTypes.push('hybrid');
+                    }
+                    // Randomly pick from available types, weighting towards newer/harder ones
+                    const randomEnemyType = availableEnemyTypes[Math.floor(Math.random() * availableEnemyTypes.length)];
                     createEnemy(randomEnemyType);
                 }
             } else {
@@ -3982,7 +4077,9 @@ const characters = {
                     const dy = bullet.y - boss.y;
                     const distance = Math.sqrt(dx * dx + dy * dy);
                     if (distance < bullet.radius + Math.max(boss.width, boss.height) / 2) {
-                        let damage = bullet.damage || 5; // Default player bullet damage reduced
+                        let damage = 75; // Default player bullet damage
+                        if (bullet.type === 'spiralOrb') damage = playerCharacters.marisa.activeSkills[0].damage;
+                        if (bullet.type === 'glacialBeam') damage = playerCharacters.cirno.activeSkills[1].damage;
                         
                         boss.health -= damage * damageMultiplier; // Player bullet deals more damage to boss
                         playBossHitSFX();
@@ -3997,7 +4094,11 @@ const characters = {
                         const dy = enemy.y - bullet.y; // Bullet is moving upwards, enemy is above
                         const distance = Math.sqrt(dx * dx + dy * dy);
                         if (distance < bullet.radius + Math.max(enemy.width, enemy.height) / 2) {
-                            let damage = bullet.damage || 5; // Default player bullet damage reduced
+                            let damage = 75; // Default damage
+                            if (bullet.type === 'spiralOrb') damage = playerCharacters.marisa.activeSkills[0].damage;
+                            if (bullet.type === 'strikeProjectile') damage = 30; // Rapid Strike Flurry damage
+                            if (bullet.type === 'windBlade') damage = 40; // Wind Blade Volley damage
+                            if (bullet.type === 'illusoryCloneBullet') damage = 10; // Illusory Duplicate damage
 
                             enemy.health -= damage * damageMultiplier; // Player bullet deals more damage to enemy
                             playBossHitSFX(); // Use boss hit SFX for enemy hit
@@ -4016,7 +4117,7 @@ const characters = {
 
             // Marisa's Lightning Dash damage to enemies/boss during dash
             if (player.isDashing) {
-                const lightningDashDamagePerSecond = playerCharacters.marisa.activeSkills[1].damagePerSecond;
+                const lightningDashDamage = playerCharacters.marisa.activeSkills[1].damage;
                 for (let i = enemies.length - 1; i >= 0; i--) {
                     const enemy = enemies[i];
                     const pLeft = player.x - player.width / 2;
@@ -4030,7 +4131,7 @@ const characters = {
                     const eBottom = enemy.y + enemy.height / 2;
 
                     if (pLeft < eRight && pRight > eLeft && pTop < eBottom && pBottom > eTop) {
-                        enemy.health -= lightningDashDamagePerSecond * deltaTime; // Continuous damage
+                        enemy.health -= lightningDashDamage * (1/60); // Continuous damage
                         playBossHitSFX();
                     }
                 }
@@ -4046,31 +4147,8 @@ const characters = {
                     const bBottom = boss.y + boss.height / 2;
 
                     if (pLeft < bRight && pRight > bLeft && pTop < bBottom && pBottom > bTop) {
-                        boss.health -= lightningDashDamagePerSecond * 0.5 * deltaTime; // Continuous damage to boss
+                        boss.health -= lightningDashDamage * 0.5 * (1/60); // Continuous damage to boss
                         playBossHitSFX();
-                    }
-                }
-            }
-
-            // Cirno's Glacial Beam damage to enemies/boss
-            for (let i = beams.length - 1; i >= 0; i--) {
-                const beam = beams[i];
-                if (beam.isPlayerSpark && beam.state === 'active') {
-                    const glacialBeamDamagePerSecond = beam.damagePerSecond;
-                    // Check collision with regular enemies
-                    for (let j = enemies.length - 1; j >= 0; j--) {
-                        const enemy = enemies[j];
-                        if (checkBeamCollision(enemy, beam)) { // Check if enemy is in the beam path
-                            enemy.health -= glacialBeamDamagePerSecond * deltaTime;
-                            playBossHitSFX();
-                        }
-                    }
-                    // Check collision with boss
-                    if (bossActive && boss) {
-                        if (checkBeamCollision(boss, beam)) { // Check if boss is in the beam path
-                            boss.health -= glacialBeamDamagePerSecond * deltaTime;
-                            playBossHitSFX();
-                        }
                     }
                 }
             }
@@ -4132,39 +4210,6 @@ const characters = {
             requestAnimationFrame(gameLoop);
         }
 
-        // --- Character Selection Logic ---
-        characterButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Remove 'selected' class from all buttons
-                characterButtons.forEach(btn => btn.classList.remove('selected'));
-                // Add 'selected' class to the clicked button
-                button.classList.add('selected');
-                currentPlayerType = button.dataset.character;
-                updateCharacterDescription(currentPlayerType); // Update description on selection
-                console.log(`Selected character: ${currentPlayerType}`);
-            });
-        });
-
-        // Function to update character description
-        function updateCharacterDescription(characterType) {
-            const charData = playerCharacters[characterType];
-            const t = texts[currentLanguage];
-            let desc = charData.description[currentLanguage];
-
-            // Append specific skill descriptions for clarity
-            desc += `<br><br><b>${t.activeSkills}:</b><br>`;
-            charData.activeSkills.forEach((skill, index) => {
-                desc += `- ${t[`skill${index + 1}`]}: ${skill.description[currentLanguage]} (CD: ${skill.cooldown}s)<br>`;
-            });
-            desc += `<br><b>${t.passiveSkill}:</b> ${charData.passive.description[currentLanguage]}`;
-
-            characterDescription.innerHTML = desc;
-        }
-
-        // Set default selected character (Reimu) and its description
-        document.querySelector('.character-button[data-character="reimu"]').classList.add('selected');
-
-
         // --- Language Translation ---
         const texts = {
             en: {
@@ -4177,7 +4222,6 @@ const characters = {
                 sakuya: "Sakuya (Precise)",
                 youmu: "Youmu (Swift)",
                 cirno: "Cirno (Resilient)",
-                gojo: "Gojo (Ultimate)",
                 startButton: "Start Game",
                 gameOverTitle: "GAME OVER!",
                 gameOverScoreText: "You survived for ",
@@ -4212,7 +4256,6 @@ const characters = {
                 sakuya: "Sakuya (Chính xác)",
                 youmu: "Youmu (Né tránh)",
                 cirno: "Cirno (Kiên cường)",
-                gojo: "Gojo (Tối thượng)",
                 startButton: "Bắt đầu trò chơi",
                 gameOverTitle: "HẾT GAME!",
                 gameOverScoreText: "Bạn đã sống sót trong ",
@@ -4272,7 +4315,6 @@ const characters = {
             document.getElementById('sakuyaButton').textContent = t.sakuya;
             document.getElementById('youmuButton').textContent = t.youmu;
             document.getElementById('cirnoButton').textContent = t.cirno;
-            document.getElementById('gojoButton').textContent = t.gojo;
 
             // Update dynamic game info texts (if game is running)
             if (gameRunning) {
@@ -4307,106 +4349,9 @@ const characters = {
             });
         });
 
-
-        // --- Start game function ---
-        async function startGame() {
-            updateCanvasSize(); // Update canvas size before starting
-            createStars();
-            gameRunning = true;
-            gamePaused = false;
-            score = 0;
-            difficultyLevel = 1;
-            difficultyTimer = 0;
-
-            // Initialize player stats based on selected character
-            const selectedChar = playerCharacters[currentPlayerType];
-            player.speed = selectedChar.baseSpeed;
-            player.focusSpeedMultiplier = selectedChar.focusSpeedMultiplier;
-            player.color = selectedChar.color;
-            player.hitboxRadius = selectedChar.hitboxRadius;
-            player.passive = selectedChar.passive; // Assign passive skill
-            player.activeSkills = selectedChar.activeSkills.map(s => ({ ...s, lastUseTime: -s.cooldown })); // Initialize active skills with cooldowns
-            revivesLeft = selectedChar.initialRevives; // Set revives based on character
-            
-            isInvincible = false;
-            invincibleTimer = 0;
-            deathCount = 0; // Reset death count
-            scoreAtLastDeath = 0; // Reset score at death
-            nextArtifactScore = ARTIFACT_SPAWN_INTERVAL; // Reset artifact spawn threshold
-            startTime = performance.now();
-            lastFrameTime = startTime;
-
-            updateSkillButtonState(); // Initialize skill button display
-
-            boss = null; // Reset boss
-            bossActive = false;
-            currentBossPhaseIndex = 0; // Reset boss phase
-            bossHealthBarContainer.style.display = 'none'; // Hide boss health bar
-
-            player.x = CANVAS_WIDTH / 2;
-            player.y = CANVAS_HEIGHT - player.height / 2 - 30; // Position player block correctly
-            player.isFocusing = false;
-            player.isDashing = false; // Reset dashing flag
-            player.damageBoostActive = false; // Reset damage boost
-
-            // Reset skill effect states
-            bulletSlowEffectActive = false;
-            bulletSlowTimer = 0;
-            bossTimeStopActive = false; // Reset boss time stop
-            bossTimeStopTimer = 0;
-            playerMovementFrozen = false; // Reset player freeze
-            playerSkillsFrozen = false; // Reset player skills freeze
-
-            // Clear all game elements to ensure a clean start
-            enemyProjectiles.length = 0;
-            playerProjectiles.length = 0;
-            bulletTrails.length = 0;
-            artifacts.length = 0;
-            particles.length = 0;
-            beams.length = 0;
-            darkZones.length = 0;
-            spectralSpikes.length = 0;
-            phantomBlasters.length = 0;
-            crushingDescents.length = 0; // Clear crushing descents
-            enemies.length = 0; // Clear all regular enemies
-
-            clearAllTimers(); // Clear any lingering intervals/timeouts from previous games
-            // Stop Tone.js transport explicitly
-            if (Tone.Transport.state !== 'stopped') {
-                Tone.Transport.stop();
-            }
-
-
-            // Spawn initial enemy
-            const initialEnemyTypes = Object.keys(enemyTypes); // Get all enemy types
-            const randomInitialEnemyType = initialEnemyTypes[Math.floor(Math.random() * initialEnemyTypes.length)]; // Fixed typo here
-            createEnemy(randomInitialEnemyType);
-
-            gameOverScreen.style.display = 'none';
-            pausedOverlay.style.display = 'none';
-            startScreen.style.display = 'none';
-            gameWinScreen.style.display = 'none';
-
-            // Update game info displays with current language
-            scoreDisplay.textContent = `${texts[currentLanguage].score}: 0`;
-            difficultyDisplay.textContent = `${texts[currentLanguage].difficulty}: 1`;
-            revivesDisplay.textContent = `${texts[currentLanguage].revives}: ${revivesLeft}`;
-            pauseButton.textContent = texts[currentLanguage].pause;
-            musicToggleButton.textContent = texts[currentLanguage].toggleMusic;
-
-            initMusic();
-            initSFX();
-            // Start music if not already playing or paused
-            if (!isMusicPlaying) {
-                await toggleMusic();
-            } else {
-                if (Tone.Transport.state === 'paused' || Tone.Transport.state === 'stopped') {
-                    Tone.Transport.start();
-                }
-                masterGain.gain.linearRampToValueAtTime(0.4, Tone.context.currentTime + 0.2);
-            }
-
-            requestAnimationFrame(gameLoop);
+        // Initialize master gain if needed
+        if (masterGain) {
+            masterGain.gain.linearRampToValueAtTime(0.4, Tone.context.currentTime + 0.2);
         }
 
         // --- Game over function ---
@@ -4494,677 +4439,231 @@ const characters = {
             if (Tone.Transport.state !== 'stopped') {
                 Tone.Transport.stop();
             }
-
-            setLanguage(currentLanguage); // Ensure start screen text is in current language
             updateCharacterDescription(currentPlayerType); // Update description on start screen
         }
 
+        // --- Character Selection Logic ---
+        const characterSelectButtons = document.querySelectorAll('.character-button');
+        const characterDescElement = document.getElementById('characterDescription');
+        const defaultCharacter = 'reimu'; // Default to Reimu if none selected
+        
+        // Function to update character description
+        function updateCharacterDescription(characterType) {
+            if (!characterType || !playerCharacters[characterType]) return;
+            
+            const charData = playerCharacters[characterType];
+            const t = texts[currentLanguage] || texts['en']; // Fallback to English
+            let desc = charData.description ? (charData.description[currentLanguage] || charData.description.en || '') : '';
+
+            // Append specific skill descriptions for clarity
+            if (charData.activeSkills) {
+                desc += `<br><br><b>${t.activeSkills || 'Active Skills'}:</b><br>`;
+                charData.activeSkills.forEach((skill, index) => {
+                    const skillName = t[`skill${index + 1}`] || `Skill ${index + 1}`;
+                    const skillDesc = skill.description ? (skill.description[currentLanguage] || skill.description.en || '') : '';
+                    desc += `- ${skillName}: ${skillDesc} (CD: ${skill.cooldown || 'N/A'}s)<br>`;
+                });
+            }
+            
+            if (charData.passive && charData.passive.description) {
+                const passiveDesc = charData.passive.description[currentLanguage] || charData.passive.description.en || '';
+                desc += `<br><b>${t.passiveSkill || 'Passive Skill'}:</b> ${passiveDesc}`;
+            }
+
+            if (characterDescElement) {
+                characterDescElement.innerHTML = desc;
+            }
+        }
+        
+        // Initialize default character selection
+        function initializeCharacterSelection() {
+            // Set default selected character (Reimu)
+            if (characterSelectButtons.length > 0) {
+                const defaultButton = Array.from(characterSelectButtons).find(btn => btn.dataset.character === defaultCharacter);
+                if (defaultButton) {
+                    defaultButton.classList.add('selected');
+                    currentPlayerType = defaultCharacter;
+                } else {
+                    characterSelectButtons[0].classList.add('selected');
+                    currentPlayerType = characterSelectButtons[0].dataset.character;
+                }
+                updateCharacterDescription(currentPlayerType);
+            }
+        }
+        
+        // Add click event listeners to character buttons
+        characterSelectButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove 'selected' class from all buttons
+                characterSelectButtons.forEach(btn => btn.classList.remove('selected'));
+                // Add 'selected' class to the clicked button
+                button.classList.add('selected');
+                currentPlayerType = button.dataset.character;
+                updateCharacterDescription(currentPlayerType);
+                console.log(`Selected character: ${currentPlayerType}`);
+            });
+        });
+        
+        // Initialize character selection when the page loads
+        document.addEventListener('DOMContentLoaded', initializeCharacterSelection);
+        // Also initialize immediately in case DOM is already loaded
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            setTimeout(initializeCharacterSelection, 0);
+        }
+
         // --- Event Listeners for buttons ---
-        startButton.addEventListener('click', startGame); // New start button listener
+        startButton.addEventListener('click', () => {
+            // Ensure a character is selected before starting
+            const selectedButton = document.querySelector('.character-button.selected');
+            if (!selectedButton && characterSelectButtons.length > 0) {
+                // If no character is selected, select the first one by default
+                characterSelectButtons[0].classList.add('selected');
+                currentPlayerType = characterSelectButtons[0].dataset.character;
+            }
+            startGame();
+        });
+        
         restartButton.addEventListener('click', startGame);
         winRestartButton.addEventListener('click', startGame); // Restart from win screen
-        pauseButton.addEventListener('click', togglePause);
+        winMenuButton.addEventListener('click', returnToStartScreen);
+        menuButton.addEventListener('click', returnToStartScreen);
         musicToggleButton.addEventListener('click', toggleMusic);
+        helpButton.addEventListener('click', toggleHelp);
+        closeHelpButton.addEventListener('click', toggleHelp);
+        assistButton.addEventListener('click', triggerAssist);
+        pauseButton.addEventListener('click', togglePause);
+        resumeButton.addEventListener('click', togglePause);
+        
+        // Skill buttons with cooldown indicators
+        const skill1Cooldown = document.createElement('div');
+        skill1Cooldown.className = 'skill-cooldown';
+        skill1Button.appendChild(skill1Cooldown);
+        
+        const skill2Cooldown = document.createElement('div');
+        skill2Cooldown.className = 'skill-cooldown';
+        skill2Button.appendChild(skill2Cooldown);
+        
+        // Add skill button event listeners
+        skill1Button.addEventListener('click', () => useSkill(0));
+        skill2Button.addEventListener('click', () => useSkill(1));
+        
+        // Keyboard controls for skills
+        document.addEventListener('keydown', (e) => {
+            if (!gameRunning || gamePaused) return;
+            
+            // Use Z for skill 1 and X for skill 2
+            if (e.key.toLowerCase() === 'z') {
+                useSkill(0);
+                e.preventDefault(); // Prevent default browser action
+            } else if (e.key.toLowerCase() === 'x') {
+                useSkill(1);
+                e.preventDefault(); // Prevent default browser action
+            }
+        });
+        
+        // Update skill button states
+        function updateSkillButtons() {
+            if (!gameRunning) return;
+            
+            const currentTime = performance.now() / 1000; // in seconds
+            
+            // Update skill 1 button
+            if (player.activeSkills && player.activeSkills[0]) {
+                const skill = player.activeSkills[0];
+                const cooldown = skill.cooldown * (player.passive?.type === 'arcaneFlow' ? (1 - player.passive.value) : 1);
+                const remaining = Math.max(0, cooldown - (currentTime - (skill.lastUseTime || 0)));
+                const percentage = Math.min(100, (remaining / cooldown) * 100);
+                
+                skill1Cooldown.style.height = `${percentage}%`;
+                skill1Button.disabled = remaining > 0;
+            }
+            
+            // Update skill 2 button
+            if (player.activeSkills && player.activeSkills[1]) {
+                const skill = player.activeSkills[1];
+                const cooldown = skill.cooldown * (player.passive?.type === 'arcaneFlow' ? (1 - player.passive.value) : 1);
+                const remaining = Math.max(0, cooldown - (currentTime - (skill.lastUseTime || 0)));
+                const percentage = Math.min(100, (remaining / cooldown) * 100);
+                
+                skill2Cooldown.style.height = `${percentage}%`;
+                skill2Button.disabled = remaining > 0;
+            }
+        }
+
+        // Main game loop
+        function gameLoop(timestamp) {
+            if (!gameRunning) return;
+            
+            if (gamePaused) {
+                requestAnimationFrame(gameLoop);
+                return;
+            }
+
+            if (!lastTimestamp) lastTimestamp = timestamp;
+            const deltaTime = Math.min(0.1, (timestamp - lastTimestamp) / 1000); // Limit deltaTime to prevent physics issues
+            lastTimestamp = timestamp;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Update game state
+            updatePlayer(deltaTime);
+            updateEnemies(deltaTime);
+            updateEnemyProjectiles(deltaTime);
+            updatePlayerProjectiles();
+            updateParticles(deltaTime);
+            updateArtifacts(deltaTime);
+            
+            // Update boss and boss attacks if boss exists
+            if (boss) {
+                updateBoss(deltaTime);
+                updateBeams(deltaTime);
+                updateDarkZones(deltaTime);
+                updateSpectralSpikes(deltaTime);
+                updatePhantomBlasters(deltaTime);
+                updateCrushingDescents(deltaTime);
+            }
+            
+            // Draw everything
+            drawParticles();
+            drawPlayer();
+            enemies.forEach(drawEnemy);
+            enemyProjectiles.forEach(drawBullet);
+            playerProjectiles.forEach(drawBullet);
+            artifacts.forEach(drawArtifact);
+            
+            // Draw boss and boss attacks if boss exists
+            if (boss) {
+                drawBoss(boss);
+                beams.forEach(drawBeam);
+                darkZones.forEach(drawDarkZone);
+                spectralSpikes.forEach(drawSpectralSpike);
+                phantomBlasters.forEach(drawPhantomBlaster);
+                crushingDescents.forEach(drawCrushingDescent);
+            }
+            
+            // Update UI
+            updateSkillButtons();
+            
+            // Continue the game loop
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Khởi tạo game loop
+        let lastTimestamp;
+        requestAnimationFrame(gameLoop);
+
+        // Character selection is now handled at the beginning of the file
+        
+        // Function to update character description is now at the beginning of the file
 
         // Home button listeners
         homeButtonGameOver.addEventListener('click', returnToStartScreen);
         homeButtonGameWin.addEventListener('click', returnToStartScreen);
         homeButtonPaused.addEventListener('click', returnToStartScreen);
-
-
+        
         // Initial setup on window load is handled by the 'load' event listener
-
-        // --- Guide Popup Logic ---
-        const guideButton = document.getElementById('guideButton');
-        const guidePopup = document.getElementById('guidePopup');
-        const guideTitle = document.getElementById('guideTitle');
-        const guideContent = document.getElementById('guideContent');
-        const closeGuideButton = document.getElementById('closeGuideButton');
-
-        const guideTexts = {
-            en: {
-                title: "GUIDE",
-                close: "Close",
-                content: `
-<b>How to Play:</b><br>
-- <b>Move</b>: Arrow keys (or WASD) / Virtual joystick (mobile)<br>
-- <b>Focus (slow move)</b>: Hold Shift or tap Focus button<br>
-- <b>Skill 1</b>: Z key or Skill 1 button<br>
-- <b>Skill 2</b>: X key or Skill 2 button<br>
-- <b>Pause</b>: ESC or Pause button<br>
-- <b>Revive</b>: You have limited revives. When hit, you lose one.<br>
-- <b>Artifacts</b>: Collect for buffs (slow bullets, speed up, clear bullets).<br>
-- <b>Boss</b>: Survive to face the boss! Each phase has unique attacks.<br>
-<br>
-<b>Tips:</b><br>
-- Use Focus to dodge tight bullet patterns.<br>
-- Each character has unique skills and passives.<br>
-- Artifacts can save you in tough situations.<br>
-- Some skills clear bullets or make you invincible.<br>
-- Try all characters for different playstyles!<br>
-                `
-            },
-            vi: {
-                title: "HƯỚNG DẪN",
-                close: "Đóng",
-                content: `
-<b>Cách chơi:</b><br>
-- <b>Di chuyển</b>: Phím mũi tên (hoặc WASD) / Joystick ảo (mobile)<br>
-- <b>Chế độ chính xác (chậm)</b>: Giữ Shift hoặc nhấn nút Focus<br>
-- <b>Kỹ năng 1</b>: Phím Z hoặc nút Kỹ năng 1<br>
-- <b>Kỹ năng 2</b>: Phím X hoặc nút Kỹ năng 2<br>
-- <b>Tạm dừng</b>: ESC hoặc nút Tạm dừng<br>
-- <b>Hồi sinh</b>: Bạn có số lần hồi sinh giới hạn. Mỗi lần trúng đạn sẽ mất 1 mạng.<br>
-- <b>Vật phẩm</b>: Nhặt để nhận buff (làm chậm đạn, tăng tốc, xóa đạn).<br>
-- <b>Boss</b>: Sống sót đủ lâu để gặp boss! Mỗi giai đoạn boss có chiêu riêng.<br>
-<br>
-<b>Mẹo:</b><br>
-- Dùng Focus để né các pha mưa đạn dày đặc.<br>
-- Mỗi nhân vật có kỹ năng và bị động riêng.<br>
-- Vật phẩm có thể cứu bạn lúc nguy hiểm.<br>
-- Một số kỹ năng giúp xóa đạn hoặc bất tử tạm thời.<br>
-- Hãy thử tất cả nhân vật để tìm phong cách phù hợp!<br>
-                `
-            }
-        };
-
-        function showGuide() {
-            guideTitle.textContent = guideTexts[currentLanguage].title;
-            guideContent.innerHTML = guideTexts[currentLanguage].content;
-            closeGuideButton.textContent = guideTexts[currentLanguage].close;
-            guidePopup.style.display = 'flex';
-        }
-        function hideGuide() {
-            guidePopup.style.display = 'none';
-        }
-        guideButton.addEventListener('click', showGuide);
-        closeGuideButton.addEventListener('click', hideGuide);
-        // Đóng guide khi nhấn ESC
-        window.addEventListener('keydown', (e) => {
-            if (guidePopup.style.display === 'flex' && (e.key === 'Escape' || e.code === 'Escape')) {
-                hideGuide();
-            }
-        });
-        // Tự động cập nhật ngôn ngữ khi đổi language
-        function updateGuideLanguage() {
-            if (guidePopup.style.display === 'flex') showGuide();
-        }
-        languageButtons.forEach(btn => btn.addEventListener('click', updateGuideLanguage));
-
-        // Tooltip logic (PC: hover, Mobile: long press)
-        const skillButtons = [
-            { btn: skill1Button, name: 'Infinity', key: 'Z', desc: 'Chặn đạn, bất tử tạm thời.' },
-            { btn: skill2Button, name: 'Six Eyes', key: 'X', desc: 'Tăng tốc, né tránh, làm chậm địch.' },
-            { btn: skill3Button, name: 'Hollow Purple', key: 'R', desc: 'Ultimate: Tia năng lượng cực mạnh. Mở khi đủ năng lượng.' },
-            { btn: skill4Button, name: 'Domain Expansion', key: 'F', desc: 'Ultimate: Đóng băng toàn bộ, mở khi tiêu diệt đủ quái.' }
-        ];
-        skillButtons.forEach(({btn, name, key, desc}) => {
-            btn.title = `${name} (${key}): ${desc}`;
-            // Mobile long press (giữ 600ms)
-            let pressTimer;
-            btn.addEventListener('touchstart', e => {
-                pressTimer = setTimeout(() => {
-                    alert(`${name}: ${desc}`);
-                }, 600);
-            });
-            btn.addEventListener('touchend', e => clearTimeout(pressTimer));
-        });
-
-        // --- Gojo unlock logic ---
-        let gojoEnergy = 0;
-        let gojoKills = 0;
-        let gojoSkill3Unlocked = false;
-        let gojoSkill4Unlocked = false;
-        const GOJO_ENERGY_MAX = 100;
-        const GOJO_KILLS_REQUIRED = 20;
-
-        function updateGojoSkillUnlocks() {
-            // Skill 3: Hollow Purple
-            if (currentPlayerType === 'gojo') {
-                if (gojoEnergy >= GOJO_ENERGY_MAX) {
-                    gojoSkill3Unlocked = true;
-                    skill3Button.disabled = false;
-                    skill3Button.style.opacity = 1;
-                    skill3Button.innerHTML = 'R<br><span>Hollow Purple</span>';
-                } else {
-                    gojoSkill3Unlocked = false;
-                    skill3Button.disabled = true;
-                    skill3Button.style.opacity = 0.5;
-                    skill3Button.innerHTML = `R<br><span>Hollow Purple<br>(${gojoEnergy}/${GOJO_ENERGY_MAX})</span>`;
-                }
-                // Skill 4: Domain Expansion
-                if (gojoKills >= GOJO_KILLS_REQUIRED) {
-                    gojoSkill4Unlocked = true;
-                    skill4Button.disabled = false;
-                    skill4Button.style.opacity = 1;
-                    skill4Button.innerHTML = 'F<br><span>Domain Expansion</span>';
-                } else {
-                    gojoSkill4Unlocked = false;
-                    skill4Button.disabled = true;
-                    skill4Button.style.opacity = 0.5;
-                    skill4Button.innerHTML = `F<br><span>Domain Expansion<br>(${gojoKills}/${GOJO_KILLS_REQUIRED})</span>`;
-                }
-            }
-        }
-        // Gọi updateGojoSkillUnlocks() mỗi khi năng lượng hoặc kill thay đổi
-        // --- Tăng năng lượng khi né đạn hoặc bắn trúng ---
-        function onGojoDodgeOrHit() {
-            if (currentPlayerType === 'gojo' && gojoEnergy < GOJO_ENERGY_MAX) {
-                gojoEnergy += 10;
-                if (gojoEnergy > GOJO_ENERGY_MAX) gojoEnergy = GOJO_ENERGY_MAX;
-                updateGojoSkillUnlocks();
-            }
-        }
-        // --- Tăng kill khi tiêu diệt quái ---
-        function onGojoKillEnemy() {
-            if (currentPlayerType === 'gojo' && gojoKills < GOJO_KILLS_REQUIRED) {
-                gojoKills++;
-                updateGojoSkillUnlocks();
-            }
-        }
-        // --- Reset khi dùng skill ---
-        function onGojoUseSkill3() {
-            gojoEnergy = 0;
-            updateGojoSkillUnlocks();
-        }
-        function onGojoUseSkill4() {
-            gojoKills = 0;
-            updateGojoSkillUnlocks();
-        }
-        // --- Gọi các hàm này ở các vị trí phù hợp trong game loop ---
-
-        // --- Hiệu ứng Infinity ---
-        function drawInfinityEffect() {
-            if (currentPlayerType === 'gojo' && player.activeSkill === 'infinity') {
-                ctx.save();
-                ctx.globalAlpha = 0.5;
-                ctx.beginPath();
-                ctx.arc(player.x, player.y, player.width * 2.5, 0, Math.PI * 2);
-                ctx.strokeStyle = '#5ecfff';
-                ctx.lineWidth = 6;
-                ctx.shadowColor = '#5ecfff';
-                ctx.shadowBlur = 18;
-                ctx.stroke();
-                ctx.restore();
-            }
-        }
-        // --- Hiệu ứng Six Eyes ---
-        function drawSixEyesEffect() {
-            if (currentPlayerType === 'gojo' && player.activeSkill === 'sixEyes') {
-                ctx.save();
-                ctx.globalAlpha = 0.25;
-                ctx.fillStyle = '#5ecfff';
-                ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-                ctx.restore();
-                // Particle quanh Gojo
-                for (let i = 0; i < 8; i++) {
-                    const angle = (Math.PI * 2 / 8) * i + performance.now() * 0.002;
-                    createParticle(player.x + Math.cos(angle) * 30, player.y + Math.sin(angle) * 30, '#5ecfff', 6, Math.cos(angle) * 1.5, Math.sin(angle) * 1.5, 0.7, 0.01, 0.95);
-                }
-            }
-        }
-        // --- Hiệu ứng Hollow Purple ---
-        function drawHollowPurpleEffect() {
-            if (currentPlayerType === 'gojo' && player.activeSkill === 'hollowPurple') {
-                ctx.save();
-                ctx.globalAlpha = 0.7;
-                ctx.beginPath();
-                ctx.arc(player.x, player.y, 40, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(120,0,255,0.7)';
-                ctx.shadowColor = '#a0f';
-                ctx.shadowBlur = 30;
-                ctx.fill();
-                ctx.restore();
-                // Laser
-                ctx.save();
-                ctx.globalAlpha = 0.5;
-                ctx.beginPath();
-                ctx.moveTo(player.x, player.y);
-                ctx.lineTo(player.x, 0);
-                ctx.strokeStyle = 'rgba(180,0,255,0.7)';
-                ctx.lineWidth = 22;
-                ctx.shadowColor = '#fff';
-                ctx.shadowBlur = 40;
-                ctx.stroke();
-                ctx.restore();
-            }
-        }
-        // --- Hiệu ứng Domain Expansion ---
-        function drawDomainExpansionEffect() {
-            if (currentPlayerType === 'gojo' && player.activeSkill === 'domainExpansion') {
-                ctx.save();
-                ctx.globalAlpha = 0.35;
-                ctx.fillStyle = 'rgba(80,0,120,0.7)';
-                ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-                ctx.restore();
-                // Vòng tròn không gian
-                ctx.save();
-                ctx.globalAlpha = 0.7;
-                ctx.beginPath();
-                ctx.arc(player.x, player.y, 180, 0, Math.PI * 2);
-                ctx.strokeStyle = '#a0f';
-                ctx.lineWidth = 10;
-                ctx.shadowColor = '#fff';
-                ctx.shadowBlur = 30;
-                ctx.stroke();
-                ctx.restore();
-            }
-        }
-        // --- Gọi các hàm hiệu ứng này trong game loop ---
-
-        function showGojoGuide() {
-            const isMobile = window.innerWidth < 800;
-            let text = '';
-            if (isMobile) {
-                text = 'Chạm nút 1: Infinity<br>2: Six Eyes<br>3: Hollow Purple (mở khi đủ năng lượng)<br>4: Domain Expansion (mở khi đủ kill)';
-            } else {
-                text = 'Z: Infinity | X: Six Eyes | R: Hollow Purple (mở khi đủ năng lượng) | F: Domain Expansion (mở khi đủ kill)';
-            }
-            document.getElementById('gojoSkillGuideText').innerHTML = text;
-            document.getElementById('gojoSkillGuide').style.display = 'block';
-        }
-        document.getElementById('gojoGuideBtn').onclick = showGojoGuide;
-        // Tự động hiện hướng dẫn khi chọn Gojo
-        function autoShowGojoGuideOnSelect() {
-            if (currentPlayerType === 'gojo') setTimeout(showGojoGuide, 500);
-        }
-        // Gọi autoShowGojoGuideOnSelect() khi người chơi chọn nhân vật Gojo
-
-        // --- Đảm bảo random enemyType đúng ---
-        function spawnRandomEnemy() {
-            const enemyTypesArray = Object.keys(enemyTypes);
-            if (enemyTypesArray.length > 0) {
-                const randomEnemyType = enemyTypesArray[Math.floor(Math.random() * enemyTypesArray.length)];
-                createEnemy(randomEnemyType);
-            } else {
-                console.error('Không có enemyType nào hợp lệ để spawn!');
-            }
-        }
-        // --- Sửa trong game loop ---
-        if (!bossActive) {
-            difficultyTimer += deltaTime;
-            const difficultyIncreaseInterval = 4;
-            if (difficultyTimer >= difficultyIncreaseInterval) {
-                difficultyLevel++;
-                difficultyTimer = 0;
-                difficultyDisplay.textContent = `${texts[currentLanguage].difficulty}: ${difficultyLevel}`;
-                playDifficultyUpSFX();
-            }
-            if (enemies.length < MAX_ENEMIES_ON_SCREEN) {
-                spawnRandomEnemy();
-            }
-        } else {
-            updateBoss(deltaTime);
-            updateBossHealthBar();
-        }
-        // --- Sửa khi khởi tạo game ---
-        spawnRandomEnemy();
-        // --- Thêm kiểm tra đầu vào trong createEnemy ---
-        function createEnemy(enemyType) {
-            const type = enemyTypes[enemyType];
-            if (!type) {
-                console.error('Enemy type không hợp lệ:', enemyType);
-                return;
-            }
-            const x = Math.random() * (CANVAS_WIDTH - type.width) + type.width / 2;
-            const y = Math.random() * (CANVAS_HEIGHT / 4) + type.height / 2;
-            enemies.push({
-                x: x,
-                y: y,
-                width: type.width,
-                height: type.height,
-                color: type.color,
-                shootInterval: type.shootInterval,
-                lastShotTime: 0,
-                movePattern: type.movePattern,
-                moveSpeed: type.moveSpeed || 0,
-                health: type.health,
-                maxHealth: type.health,
-                moveDirection: (Math.random() > 0.5) ? 1 : -1,
-                skillType: type.skillType,
-                skillInterval: type.skillInterval,
-                lastSkillTime: 0,
-                isCharging: false,
-                chargeTimer: 0,
-                chargeTargetX: 0,
-                chargeTargetY: 0,
-                originalColor: type.color,
-                rapidFireCount: type.rapidFireCount || 0,
-                rapidFireDelay: type.rapidFireDelay || 0,
-                lastRapidFireBulletTime: 0,
-                bulletsShotInBurst: 0,
-                waveDirection: type.waveDirection || null,
-                homingBullet: null,
-                attackPatterns: type.attackPatterns || [],
-                currentAttackIndex: 0,
-                attackSwitchInterval: type.attackSwitchInterval || 0,
-                lastAttackSwitchTime: 0
-            });
-        }
-        // --- Đảm bảo player luôn được khởi tạo đúng khi bắt đầu game ---
-        function resetPlayer() {
-            const char = playerCharacters[currentPlayerType];
-            player.x = CANVAS_WIDTH / 2;
-            player.y = CANVAS_HEIGHT - 50;
-            player.width = 20;
-            player.height = 20;
-            player.speed = char.baseSpeed;
-            player.focusSpeedMultiplier = char.focusSpeedMultiplier;
-            player.color = char.color;
-            player.hitboxRadius = char.hitboxRadius;
-            player.isFocusing = false;
-            player.isDashing = false;
-            player.activeSkills = char.activeSkills.map(skill => ({...skill, lastUseTime: 0}));
-            player.passive = char.passive;
-            player.damageBoostActive = false;
-        }
-        resetPlayer();
-        // ... existing code ...
-
-        // --- Render giao diện chọn nhân vật và skill ---
-        const charSelectDiv = document.getElementById('character-select');
-        const charInfoDiv = document.getElementById('character-info');
-        const skillButtonsDiv = document.getElementById('skill-buttons');
-
-        let currentCharKey = Object.keys(characters)[0];
-
-        function renderCharacterSelect() {
-          charSelectDiv.innerHTML = '';
-          Object.entries(characters).forEach(([key, char]) => {
-            const btn = document.createElement('button');
-            btn.textContent = char.name;
-            btn.style.background = key === currentCharKey ? '#5ecfff' : char.color;
-            btn.style.color = '#222';
-            btn.style.fontWeight = 'bold';
-            btn.style.marginRight = '8px';
-            btn.style.padding = '8px 18px';
-            btn.style.borderRadius = '8px';
-            btn.style.border = key === currentCharKey ? '2px solid #fff' : '1px solid #888';
-            btn.onclick = () => {
-              currentCharKey = key;
-              renderCharacterSelect();
-              renderCharacterInfo();
-              renderSkillButtons();
-            };
-            charSelectDiv.appendChild(btn);
-          });
-        }
-
-        function renderCharacterInfo() {
-          const char = characters[currentCharKey];
-          charInfoDiv.innerHTML = `
-            <div style="font-size:1.2em;font-weight:bold;color:${char.color}">${char.name}</div>
-            <div style="margin:6px 0 2px 0;font-style:italic;">${char.description}</div>
-            <div style="margin:2px 0 0 0;"><b>Kỹ năng bị động:</b> <span title="${char.passive.desc}">${char.passive.name}</span> <span style="color:#aaa;font-size:0.95em;">(${char.passive.desc})</span></div>
-          `;
-        }
-
-        function renderSkillButtons() {
-          const char = characters[currentCharKey];
-          skillButtonsDiv.innerHTML = '';
-          char.skills.forEach(skill => {
-            const btn = document.createElement('button');
-            btn.textContent = `${skill.key}\n${skill.name}`;
-            btn.style.whiteSpace = 'pre';
-            btn.style.padding = '10px 14px';
-            btn.style.borderRadius = '8px';
-            btn.style.background = '#222';
-            btn.style.color = '#fff';
-            btn.style.fontWeight = 'bold';
-            btn.style.fontSize = '1em';
-            btn.style.border = '2px solid #5ecfff';
-            btn.title = skill.desc;
-            btn.onmouseenter = () => {
-              btn.style.background = '#5ecfff';
-              btn.style.color = '#222';
-            };
-            btn.onmouseleave = () => {
-              btn.style.background = '#222';
-              btn.style.color = '#fff';
-            };
-            skillButtonsDiv.appendChild(btn);
-          });
-        }
-
-        // Khởi tạo giao diện lần đầu
-        renderCharacterSelect();
-        renderCharacterInfo();
-        renderSkillButtons();
-
-        // --- Quản lý cooldown và điều kiện mở khóa cho từng skill ---
-        let skillCooldowns = [0, 0, 0, 0]; // 4 skill cho mỗi nhân vật
-        let energy = 0;
-        let kills = 0;
-
-        // Hàm cập nhật cooldown mỗi frame
-        function updateSkillCooldowns(dt) {
-          for (let i = 0; i < skillCooldowns.length; i++) {
-            if (skillCooldowns[i] > 0) skillCooldowns[i] -= dt;
-            if (skillCooldowns[i] < 0) skillCooldowns[i] = 0;
-          }
-        }
-
-        // Hàm kiểm tra điều kiện mở khóa skill tối thượng
-        function isSkillUnlocked(skill, idx) {
-          if (skill.type === 'ultimate') {
-            if (skill.unlock && skill.unlock.energy && energy < skill.unlock.energy) return false;
-            if (skill.unlock && skill.unlock.kills && kills < skill.unlock.kills) return false;
-          }
-          return true;
-        }
-
-        // Hàm dùng skill
-        function useSkill(idx) {
-          const char = characters[currentCharKey];
-          const skill = char.skills[idx];
-          if (!isSkillUnlocked(skill, idx)) {
-            alert('Chưa đủ điều kiện mở khóa!');
-            return;
-          }
-          if (skillCooldowns[idx] > 0) {
-            alert('Skill đang hồi chiêu!');
-            return;
-          }
-          // Kích hoạt skill (tạm thời chỉ log ra, sau này thêm hiệu ứng thật)
-          alert(`Dùng skill: ${skill.name}`);
-          skillCooldowns[idx] = skill.cooldown;
-          // Nếu là skill R cần energy thì trừ energy, F cần kills thì trừ kills
-          if (skill.type === 'ultimate' && skill.unlock) {
-            if (skill.unlock.energy) energy = 0;
-            if (skill.unlock.kills) kills = 0;
-          }
-          renderSkillButtons();
-        }
-
-        // Bắt phím Z/X/R/F
-        window.addEventListener('keydown', (e) => {
-          if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
-          if (e.repeat) return;
-          if (e.key.toUpperCase() === 'Z') useSkill(0);
-          if (e.key.toUpperCase() === 'X') useSkill(1);
-          if (e.key.toUpperCase() === 'R') useSkill(2);
-          if (e.key.toUpperCase() === 'F') useSkill(3);
-        });
-
-        // Sửa lại renderSkillButtons để hiện trạng thái cooldown/mở khóa
-        function renderSkillButtons() {
-          const char = characters[currentCharKey];
-          skillButtonsDiv.innerHTML = '';
-          char.skills.forEach((skill, idx) => {
-            const btn = document.createElement('button');
-            let label = `${skill.key}\n${skill.name}`;
-            if (skillCooldowns[idx] > 0) label += `\n(${skillCooldowns[idx].toFixed(1)}s)`;
-            if (!isSkillUnlocked(skill, idx)) label += '\n(Chưa mở)';
-            btn.textContent = label;
-            btn.style.whiteSpace = 'pre';
-            btn.style.padding = '10px 14px';
-            btn.style.borderRadius = '8px';
-            btn.style.background = skillCooldowns[idx] > 0 || !isSkillUnlocked(skill, idx) ? '#444' : '#222';
-            btn.style.color = '#fff';
-            btn.style.fontWeight = 'bold';
-            btn.style.fontSize = '1em';
-            btn.style.border = '2px solid #5ecfff';
-            btn.title = skill.desc;
-            btn.disabled = skillCooldowns[idx] > 0 || !isSkillUnlocked(skill, idx);
-            btn.onclick = () => useSkill(idx);
-            btn.onmouseenter = () => {
-              if (!btn.disabled) {
-                btn.style.background = '#5ecfff';
-                btn.style.color = '#222';
-              }
-            };
-            btn.onmouseleave = () => {
-              btn.style.background = skillCooldowns[idx] > 0 || !isSkillUnlocked(skill, idx) ? '#444' : '#222';
-              btn.style.color = '#fff';
-            };
-            skillButtonsDiv.appendChild(btn);
-          });
-        }
-
-        // Khi đổi nhân vật thì reset cooldown, energy, kills
-        function selectCharacter(key) {
-          currentCharKey = key;
-          skillCooldowns = [0, 0, 0, 0];
-          energy = 0;
-          kills = 0;
-          renderCharacterSelect();
-          renderCharacterInfo();
-          renderSkillButtons();
-        }
-        // Sửa lại renderCharacterSelect để dùng selectCharacter
-        function renderCharacterSelect() {
-          charSelectDiv.innerHTML = '';
-          Object.entries(characters).forEach(([key, char]) => {
-            const btn = document.createElement('button');
-            btn.textContent = char.name;
-            btn.style.background = key === currentCharKey ? '#5ecfff' : char.color;
-            btn.style.color = '#222';
-            btn.style.fontWeight = 'bold';
-            btn.style.marginRight = '8px';
-            btn.style.padding = '8px 18px';
-            btn.style.borderRadius = '8px';
-            btn.style.border = key === currentCharKey ? '2px solid #fff' : '1px solid #888';
-            btn.onclick = () => selectCharacter(key);
-            charSelectDiv.appendChild(btn);
-          });
-        }
-
-        // Giả lập tăng energy/kills để test (bạn có thể thay bằng logic thật trong game loop)
-        window.addEventListener('keydown', (e) => {
-          if (e.key === '+') { energy += 20; if (energy > 100) energy = 100; renderSkillButtons(); }
-          if (e.key === '*') { kills += 5; renderSkillButtons(); }
-        });
-
-        // Cập nhật cooldown mỗi 100ms
-        timerSkill = setInterval(() => {
-          updateSkillCooldowns(0.1);
-          renderSkillButtons();
-        }, 100);
-
-        // Hàm áp dụng kỹ năng bị động
-        function applyPassiveEffect() {
-          const char = characters[currentCharKey];
-          if (!char || !char.passive) return;
-          switch (char.passive.id) {
-            case 'serenityAura':
-              // Ví dụ: Làm chậm đạn quanh người (giả lập: giảm tốc độ đạn toàn bộ 10%)
-              // Bạn có thể thay bằng logic quét đạn gần player nếu có array bullets
-              // bullets.forEach(b => b.speed *= 0.9);
-              break;
-            case 'magicBoost':
-              // Ví dụ: Tăng damage khi dùng skill (áp dụng khi bắn đạn)
-              // player.damageMultiplier = 1.2;
-              break;
-            case 'evasion':
-              // Ví dụ: Tỉ lệ né tránh đạn (áp dụng khi check va chạm)
-              // if (Math.random() < 0.1) tránh đạn
-              break;
-            case 'frozenBody':
-              // Ví dụ: Tăng giáp khi HP đầy (áp dụng khi nhận damage)
-              // if (player.hp === player.maxHp) player.armor = 1;
-              break;
-          }
-        }
-        // Gọi applyPassiveEffect() trong game loop (ví dụ trong setInterval hoặc requestAnimationFrame)
-        setInterval(() => {
-          applyPassiveEffect();
-        }, 100); // 100ms/lần, bạn có thể thay bằng gọi trong game loop thật
-
-        // Tooltip nổi cho skill
-        let tooltipDiv = document.createElement('div');
-        tooltipDiv.style.position = 'fixed';
-        tooltipDiv.style.background = '#222e';
-        tooltipDiv.style.color = '#fff';
-        tooltipDiv.style.padding = '10px 16px';
-        tooltipDiv.style.borderRadius = '8px';
-        tooltipDiv.style.fontSize = '1em';
-        tooltipDiv.style.boxShadow = '0 4px 16px #000a';
-        tooltipDiv.style.zIndex = 9999;
-        tooltipDiv.style.display = 'none';
-        document.body.appendChild(tooltipDiv);
-
-        function showTooltip(text, x, y) {
-          tooltipDiv.textContent = text;
-          tooltipDiv.style.left = x + 'px';
-          tooltipDiv.style.top = y + 'px';
-          tooltipDiv.style.display = 'block';
-        }
-        function hideTooltip() {
-          tooltipDiv.style.display = 'none';
-        }
-        // Sửa lại renderSkillButtons để gắn tooltip
-        function renderSkillButtons() {
-          const char = characters[currentCharKey];
-          skillButtonsDiv.innerHTML = '';
-          char.skills.forEach((skill, idx) => {
-            const btn = document.createElement('button');
-            let label = `${skill.key}\n${skill.name}`;
-            if (skillCooldowns[idx] > 0) label += `\n(${skillCooldowns[idx].toFixed(1)}s)`;
-            if (!isSkillUnlocked(skill, idx)) label += '\n(Chưa mở)';
-            btn.textContent = label;
-            btn.style.whiteSpace = 'pre';
-            btn.style.padding = '10px 14px';
-            btn.style.borderRadius = '8px';
-            btn.style.background = skillCooldowns[idx] > 0 || !isSkillUnlocked(skill, idx) ? '#444' : '#222';
-            btn.style.color = '#fff';
-            btn.style.fontWeight = 'bold';
-            btn.style.fontSize = '1em';
-            btn.style.border = '2px solid #5ecfff';
-            btn.title = skill.desc;
-            btn.disabled = skillCooldowns[idx] > 0 || !isSkillUnlocked(skill, idx);
-            btn.onclick = () => useSkill(idx);
-            // Tooltip hover PC
-            btn.onmouseenter = (e) => {
-              if (!btn.disabled) {
-                btn.style.background = '#5ecfff';
-                btn.style.color = '#222';
-              }
-              showTooltip(skill.desc, e.clientX + 10, e.clientY + 10);
-            };
-            btn.onmouseleave = () => {
-              btn.style.background = skillCooldowns[idx] > 0 || !isSkillUnlocked(skill, idx) ? '#444' : '#222';
-              btn.style.color = '#fff';
-              hideTooltip();
-            };
-            // Tooltip long press mobile
-            let pressTimer;
-            btn.addEventListener('touchstart', (e) => {
-              pressTimer = setTimeout(() => {
-                const touch = e.touches[0];
-                showTooltip(skill.desc, touch.clientX + 10, touch.clientY + 10);
-              }, 500);
-            });
-            btn.addEventListener('touchend', () => {
-              clearTimeout(pressTimer);
-              hideTooltip();
-            });
-            btn.addEventListener('touchcancel', () => {
-              clearTimeout(pressTimer);
-              hideTooltip();
-            });
-            skillButtonsDiv.appendChild(btn);
-          });
-        }
+        // Character description is initialized in initializeCharacterSelection()
     </script>
 </body>
 </html>
